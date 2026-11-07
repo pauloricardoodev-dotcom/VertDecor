@@ -14,7 +14,7 @@
   @include media-breakpoint-up(lg) {
     display: flex;
     align-items: stretch;
-    padding: calc(var(--nav-h) + 2.5rem) clamp(2rem, 4vw, 4.5rem) 0;
+    padding: calc(var(--nav-h) + 2.5rem) clamp(2rem, 8vw, 9rem) 0;
     background:
       radial-gradient(60% 75% at 70% 58%, color-mix(in srgb, $sand 95%, transparent) 0%, color-mix(in srgb, $sand 0%, transparent) 70%),
       $offwhite;
@@ -29,10 +29,11 @@
     width: 100%;
 
     @include media-breakpoint-up(lg) {
-      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-      grid-template-rows: 1fr auto;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      grid-template-rows: auto auto;
+      align-content: center; // bloco de texto centralizado na altura da mesa 3D
       grid-template-areas: 'head stage' 'body stage';
-      column-gap: clamp(1rem, 3vw, 3rem);
+      column-gap: clamp(0.75rem, 1.5vw, 1.75rem);
       row-gap: 2.25rem;
       min-height: calc(100svh - var(--nav-h) - 2.5rem);
       padding-bottom: clamp(5.5rem, 11vh, 7rem);
@@ -51,16 +52,13 @@
     span { margin-inline: 0.35em; color: $champagne; }
   }
 
-  &__title {
-    margin: 0;
-    font-weight: 300;
-    font-size: clamp(2.6rem, 11.5vw, 4.75rem);
-    line-height: 0.98;
-    color: $forest;
-
-    @include media-breakpoint-up(lg) { font-size: clamp(3.6rem, 5.4vw, 7rem); }
-
-    em { font-style: italic; }
+  // H1: a logo da marca — o maior elemento tipográfico da tela
+  &__brand {
+    margin: 0 0 clamp(1.25rem, 3vw, 2.25rem);
+    line-height: 0;
+    animation: hero-up 1s $ease-out intro(0.4s) both;
+    .metal-logo { width: min(100%, clamp(19rem, 84vw, 30rem)); }
+    @include media-breakpoint-up(lg) { .metal-logo { width: min(100%, clamp(30rem, 40vw, 44rem)); } }
   }
 
   &__title-line {
@@ -76,14 +74,16 @@
     }
   }
 
+  // a frase "A natureza encontra / sua forma / mais elegante." (secundária à logo)
   &__lead {
-    max-width: 34ch;
     margin: 0 0 1.75rem;
-    font-size: 1rem;
-    line-height: 1.65;
-    color: $stone-green;
-    animation: hero-up 1s $ease-out intro(0.95s) both;
-    @include media-breakpoint-up(lg) { font-size: 1.0625rem; }
+    font-family: $font-serif;
+    font-weight: 300;
+    font-size: clamp(1.6rem, 6.2vw, 2.1rem);
+    line-height: 1.12;
+    color: $forest;
+    em { font-style: italic; }
+    @include media-breakpoint-up(lg) { font-size: clamp(1.9rem, 2.4vw, 2.6rem); }
   }
 
   &__ctas {
@@ -109,7 +109,7 @@
     @include media-breakpoint-up(lg) {
       display: block;
       align-self: center;
-      justify-self: end;
+      justify-self: start;
       width: min(100%, calc(100svh - var(--nav-h) - 5.5rem));
       max-width: none;
       aspect-ratio: 1;
@@ -154,7 +154,7 @@
     display: none;
     @include media-breakpoint-up(lg) {
       position: absolute;
-      left: clamp(2rem, 4vw, 4.5rem);
+      left: clamp(2rem, 8vw, 9rem);
       bottom: 0;
       display: flex;
       align-items: flex-end;

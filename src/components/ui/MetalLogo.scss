@@ -1,0 +1,88 @@
+@import '../../styles/mixins';
+
+// Tamanho: defina a largura no elemento (ex.: `.hero__brand .metal-logo { width: 28rem }`)
+.metal-logo {
+  position: relative;
+  display: block;
+  width: 10rem;
+  aspect-ratio: 1000 / 205;
+  // sombra projetada: letras em relevo sobre a página
+  filter: drop-shadow(0 0.1em 0.14em rgba(30, 36, 42, 0.32));
+
+  i {
+    position: absolute;
+    inset: 0;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  // 1) lateral escura (espessura) e 2) fio de luz no topo — usam a logo inteira como máscara
+  &__shadow {
+    -webkit-mask-image: url('/logo/vert-decor-light-720.webp');
+    mask-image: url('/logo/vert-decor-light-720.webp');
+    background: #0a3025;
+    transform: translateY(3%);
+  }
+  &__edge {
+    -webkit-mask-image: url('/logo/vert-decor-light-720.webp');
+    mask-image: url('/logo/vert-decor-light-720.webp');
+    background: #e4fff3;
+    transform: translateY(-1.4%);
+    opacity: 0.55;
+  }
+
+  // 3) TEMA CLARO — jade polido, verde PROFUNDO e VIVO (saturado) para destacar do fundo claro como o ouro.
+  //    Superfície lisa, translúcida, com brilho de polimento no topo.
+  &__gem {
+    -webkit-mask-image: url('/logo/vert-decor-chrome-1000.webp');
+    mask-image: url('/logo/vert-decor-chrome-1000.webp');
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0) 30%),
+      linear-gradient(115deg, transparent 0 34%, rgba(255, 255, 255, 0.14) 40%, transparent 47%),
+      radial-gradient(ellipse 42% 70% at 20% 60%, rgba(90, 255, 190, 0.2), transparent 70%),
+      radial-gradient(ellipse 36% 80% at 62% 38%, rgba(0, 25, 16, 0.3), transparent 72%),
+      radial-gradient(ellipse 30% 70% at 92% 62%, rgba(110, 255, 205, 0.16), transparent 70%),
+      repeating-linear-gradient(64deg, rgba(255, 255, 255, 0.03) 0 4%, rgba(0, 20, 12, 0.05) 4% 8%),
+      linear-gradient(180deg, #1c9a6d 0%, #0f7753 26%, #075a3e 56%, #03422d 78%, #0d7a54 100%);
+  }
+
+  // 4) OURO: o D e o DE COR
+  &__gold {
+    background: linear-gradient(180deg, #fbe7a6 0%, #e6bd58 26%, #b98a2c 52%, #e9c673 78%, #9b6f1e 100%);
+    &--d {
+      -webkit-mask-image: url('/logo/vert-decor-gold-d-1000.webp');
+      mask-image: url('/logo/vert-decor-gold-d-1000.webp');
+    }
+    &--decor {
+      -webkit-mask-image: url('/logo/vert-decor-gold-decor-1000.webp');
+      mask-image: url('/logo/vert-decor-gold-decor-1000.webp');
+    }
+  }
+
+  :root[data-theme='dark'] & {
+    filter: drop-shadow(0 0.1em 0.2em rgba(0, 0, 0, 0.55));
+    .metal-logo__shadow { background: #020f0b; }
+    // TEMA ESCURO — mármore branco: fundo marfim com nuvens e veios cinza finos
+    .metal-logo__gem {
+      background:
+        // brilho de polimento
+        linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0) 32%),
+        // veios finos (diagonais, em alturas diferentes)
+        linear-gradient(112deg, transparent 0 17.6%, rgba(112, 106, 96, 0.5) 18%, transparent 18.6%),
+        linear-gradient(74deg, transparent 0 41.7%, rgba(130, 124, 114, 0.38) 42%, transparent 42.5%),
+        linear-gradient(121deg, transparent 0 63.7%, rgba(105, 99, 90, 0.45) 64%, transparent 64.7%),
+        linear-gradient(68deg, transparent 0 86.8%, rgba(125, 119, 109, 0.35) 87%, transparent 87.5%),
+        // nuvens suaves
+        radial-gradient(ellipse 38% 70% at 24% 55%, rgba(150, 144, 133, 0.22), transparent 72%),
+        radial-gradient(ellipse 34% 75% at 70% 42%, rgba(160, 154, 143, 0.18), transparent 72%),
+        // corpo
+        linear-gradient(180deg, #ffffff 0%, #f6f4ee 38%, #e8e5dc 72%, #f3f1ea 100%);
+    }
+    .metal-logo__shadow { background: #2b2926; }
+    .metal-logo__edge { background: #ffffff; opacity: 0.9; }
+  }
+}

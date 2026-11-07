@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { scrollToHash } from '../../../lib/scroll';
+import { MetalLogo } from '../../ui/MetalLogo';
 import { HeroBackdrop, HeroHalo } from './HeroBackdrop';
 import { HeroStage } from './HeroStage';
 import { MaterialSelector } from './MaterialSelector';
@@ -34,12 +35,9 @@ export function Hero() {
           <p className="hero__eyebrow">
             Design <span aria-hidden="true">•</span> Matéria <span aria-hidden="true">•</span> Personalidade
           </p>
-          <h1 id="hero-title" className="hero__title">
-            {TITLE_LINES.map((line, i) => (
-              <span key={line} className="hero__title-line" style={{ '--i': i } as React.CSSProperties}>
-                <span>{i === TITLE_LINES.length - 1 ? <em>{line}</em> : line}</span>
-              </span>
-            ))}
+          {/* H1 = a marca: D e DE COR em ouro, o resto cromado — o elemento mais evidente da página */}
+          <h1 id="hero-title" className="hero__brand" aria-label="Vert Decor">
+            <MetalLogo />
           </h1>
         </div>
 
@@ -57,7 +55,11 @@ export function Hero() {
 
         <div className="hero__body">
           <p className="hero__lead">
-            Peças que transformam ambientes através da beleza dos materiais naturais e da sofisticação do design.
+            {TITLE_LINES.map((line, i) => (
+              <span key={line} className="hero__title-line" style={{ '--i': i } as React.CSSProperties}>
+                <span>{i === TITLE_LINES.length - 1 ? <em>{line}</em> : line}</span>
+              </span>
+            ))}
           </p>
           <div className="hero__ctas">
             <a className="btn-vert btn-vert--solid" href="#colecao" onClick={go}>

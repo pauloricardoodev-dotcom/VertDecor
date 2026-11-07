@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { navigation } from '../../data/navigation';
 import { useScrollSpy } from '../../hooks/useScrollSpy';
 import { useScrolled } from '../../hooks/useScrolled';
-import { Logo } from '../ui/Logo';
 import { MobileMenu } from './MobileMenu';
 import { scrollToHash } from '../../lib/scroll';
 import './Navbar.scss';
@@ -40,10 +39,6 @@ export function Navbar() {
   return (
     <header className={`site-nav${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
       <div className="site-nav__inner">
-        <a className="site-nav__brand" href="#home" onClick={(e) => handleNavigate(e, '#home')}>
-          <Logo variant={open ? 'light' : 'color'} width={150} />
-        </a>
-
         <nav className="site-nav__desktop" aria-label="Navegação principal">
           <ul>
             {navigation.map((item, i) => (
