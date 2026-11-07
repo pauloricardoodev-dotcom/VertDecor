@@ -9,6 +9,9 @@ const TableScene = lazy(() => import('../../three/TableScene'));
 // Mesmo valor do preload em index.html
 const POSTER_SIZES = '(min-width: 992px) min(56vw, calc(100svh - 8.5rem)), (min-width: 768px) 34rem, calc(100vw - 2.5rem)';
 
+// Após a cortina do loader (~2,6s) + folga para o LCP e o TBT medirem só a página estática
+const AUTO_START_MS = 3600;
+
 const INTERACTION_EVENTS = ['pointerdown', 'pointermove', 'touchstart', 'keydown', 'wheel', 'scroll'] as const;
 
 interface Props {
@@ -35,16 +38,24 @@ export function HeroStage({ materialId }: Props) {
   }, [materialId, ready3d]);
 
   useEffect(() => {
-    if (!supportsWebGL() || prefersSaveData()) return;
-    setTier(getDeviceTier());
+    if (prefersSaveData()) return;
+    const detected = getDeviceTier();
+    setTier(detected);
     let cancelIdle: (() => void) | undefined;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     const start = () => {
       INTERACTION_EVENTS.forEach((ev) => window.removeEventListener(ev, start));
-      cancelIdle = onIdle(() => setLoad3d(true), 1500);
+      clearTimeout(timer);
+      // criar um contexto WebGL só para testar é caro: faz isso apenas quando vai carregar o 3D
+      cancelIdle = onIdle(() => { if (supportsWebGL()) setLoad3d(true); }, 1500);
     };
     INTERACTION_EVENTS.forEach((ev) => window.addEventListener(ev, start, { passive: true, once: true }));
+    // Desktop potente: não espera interação — a peça ganha vida logo após a tela de carregamento
+    const desktop = window.matchMedia('(hover: hover) and (pointer: fine)').matches && window.innerWidth >= 992;
+    if (detected === 'high' && desktop) timer = setTimeout(start, AUTO_START_MS);
     return () => {
       INTERACTION_EVENTS.forEach((ev) => window.removeEventListener(ev, start));
+      clearTimeout(timer);
       cancelIdle?.();
     };
   }, []);

@@ -17,27 +17,36 @@
     right: 0;
     display: none; // celular: gira com o dedo, sem botões sobre a peça
     @include media-breakpoint-up(md) { display: flex; }
-    @include media-breakpoint-up(lg) { top: 2.75rem; }
+    @include media-breakpoint-up(lg) { top: calc(var(--nav-h) + 1.5rem + 2.75rem); } // canvas sobe por baixo da navbar
     flex-direction: column;
-    align-items: flex-end;
-    gap: 0.25rem;
+    align-items: center;
+    gap: 0.6rem;
     animation: stage-fade 0.8s $ease-out 0.3s both;
 
     button {
       display: grid;
       place-items: center;
-      width: 44px;
-      height: 44px;
+      width: 52px;
+      height: 52px;
       padding: 0;
-      border: 1px solid rgba($stone-green, 0.18);
-      background: rgba($offwhite, 0.6);
-      color: $stone-green;
-      font-size: 1.1rem;
+      border: 1px solid rgba($champagne, 0.55);
+      border-radius: 50%;
+      background: $forest;
+      color: $offwhite;
+      font-size: 1.5rem;
+      font-weight: 300;
       line-height: 1;
+      box-shadow: 0 10px 24px -8px rgba($forest, 0.55), inset 0 1px 0 rgba(#fff, 0.14);
       cursor: pointer;
-      transition: background 0.3s, color 0.3s, border-color 0.3s;
-      &:hover:not(:disabled) { background: $forest; color: $offwhite; border-color: $forest; }
-      &:disabled { opacity: 0.35; cursor: default; }
+      transition: transform 0.5s $ease-out, background 0.4s, color 0.4s, box-shadow 0.5s $ease-out, opacity 0.4s;
+      &:hover:not(:disabled), &:focus-visible {
+        transform: translateY(-2px) scale(1.06);
+        background: $champagne;
+        color: $forest;
+        box-shadow: 0 14px 28px -8px rgba($champagne, 0.8);
+      }
+      &:active:not(:disabled) { transform: scale(0.96); }
+      &:disabled { opacity: 0.32; cursor: default; box-shadow: none; }
     }
   }
 

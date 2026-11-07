@@ -42,3 +42,27 @@ export interface ContactInfo {
   instagram: string;
   email: string;
 }
+
+export type ProductCategoryId = 'mesas-laterais' | 'mesas-de-centro' | 'mesas-de-apoio' | 'carrinhos-e-bares';
+
+export interface ProductCategory {
+  id: ProductCategoryId;
+  label: string;
+}
+
+/** Silhueta usada pela ilustração provisória (ProductArt) até existirem fotografias oficiais. */
+export type ProductArtKind = 'aurora' | 'orbe' | 'pilar' | 'alameda' | 'duna' | 'mare';
+
+/** Espelha o futuro modelo Prisma `Product` (relação N:N com Material via materialIds). */
+export interface Product {
+  id: string;
+  slug: string;
+  name: string;
+  category: ProductCategoryId;
+  description: string;
+  /** Pedra(s) do tampo. */
+  materialIds: string[];
+  /** Material da estrutura. */
+  frame: string;
+  art: ProductArtKind;
+}

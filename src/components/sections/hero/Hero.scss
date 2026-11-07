@@ -4,7 +4,7 @@
 .hero {
   position: relative;
   min-height: 100svh;
-  padding: calc(var(--nav-h) + 1.25rem) 1.25rem 2.5rem;
+  padding: calc(var(--nav-h) + 2.5rem) 1.25rem 2.5rem;
   background:
     radial-gradient(120% 70% at 50% 62%, rgba($sand, 0.95) 0%, rgba($sand, 0) 62%),
     $offwhite;
@@ -14,13 +14,15 @@
   @include media-breakpoint-up(lg) {
     display: flex;
     align-items: stretch;
-    padding: var(--nav-h) clamp(2rem, 4vw, 4.5rem) 0;
+    padding: calc(var(--nav-h) + 2.5rem) clamp(2rem, 4vw, 4.5rem) 0;
     background:
       radial-gradient(60% 75% at 70% 58%, rgba($sand, 0.95) 0%, rgba($sand, 0) 70%),
       $offwhite;
   }
 
   &__grid {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-areas: 'head' 'stage' 'body';
     gap: 1.25rem;
@@ -32,7 +34,7 @@
       grid-template-areas: 'head stage' 'body stage';
       column-gap: clamp(1rem, 3vw, 3rem);
       row-gap: 2.25rem;
-      min-height: calc(100svh - var(--nav-h));
+      min-height: calc(100svh - var(--nav-h) - 2.5rem);
       padding-bottom: clamp(5.5rem, 11vh, 7rem);
     }
   }
@@ -45,7 +47,7 @@
     @include eyebrow;
     margin: 0 0 1.1rem;
     color: $ink-muted;
-    animation: hero-up 0.9s $ease-out 0.35s both;
+    animation: hero-up 0.9s $ease-out intro(0.35s) both;
     span { margin-inline: 0.35em; color: $champagne; }
   }
 
@@ -70,7 +72,7 @@
     > span {
       display: inline-block;
       animation: hero-line 1.15s $ease-out both;
-      animation-delay: calc(0.45s + var(--i) * 0.11s);
+      animation-delay: calc(var(--intro) + 0.45s + var(--i) * 0.11s);
     }
   }
 
@@ -80,7 +82,7 @@
     font-size: 1rem;
     line-height: 1.65;
     color: $stone-green;
-    animation: hero-up 1s $ease-out 0.95s both;
+    animation: hero-up 1s $ease-out intro(0.95s) both;
     @include media-breakpoint-up(lg) { font-size: 1.0625rem; }
   }
 
@@ -89,7 +91,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: 0.75rem 1.75rem;
-    animation: hero-up 1s $ease-out 1.05s both;
+    animation: hero-up 1s $ease-out intro(1.05s) both;
   }
 
   // ─── Palco ───
@@ -102,13 +104,13 @@
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
-    animation: hero-stage 1.5s $ease-out 0.15s both;
+    animation: hero-stage 1.8s $ease-out intro(0.1s) both;
 
     @include media-breakpoint-up(lg) {
       display: block;
       align-self: center;
       justify-self: end;
-      width: min(100%, calc(100svh - var(--nav-h) - 3rem));
+      width: min(100%, calc(100svh - var(--nav-h) - 5.5rem));
       max-width: none;
       aspect-ratio: 1;
     }
@@ -139,7 +141,7 @@
     gap: 1rem;
     padding-bottom: 0.6rem;
     border-bottom: 1px solid rgba($stone-green, 0.14);
-    animation: hero-fade 1s $ease-out 0.9s both;
+    animation: hero-fade 1s $ease-out intro(0.9s) both;
     span {
       @include eyebrow;
       font-size: 0.625rem;
@@ -160,7 +162,7 @@
       height: 4.5rem;
       padding-bottom: 0.25rem;
       color: $ink-muted;
-      animation: hero-fade 1s $ease-out 1.5s both;
+      animation: hero-fade 1s $ease-out intro(1.5s) both;
       span { @include eyebrow; font-size: 0.625rem; padding-bottom: 1.1rem; }
       &::before {
         content: '';
@@ -170,6 +172,100 @@
         background: linear-gradient($stone-green, $stone-green) 0 0 / 100% 40% no-repeat, rgba($stone-green, 0.15);
         animation: scroll-line 2.4s $ease-in-out infinite;
       }
+    }
+  }
+}
+
+// ─── Fundo ───
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+
+  // grão fino (tile SVG estático, sem animação)
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .09 0 0 0 0 .23 0 0 0 0 .2 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  &__glow {
+    position: absolute;
+    border-radius: 50%;
+    will-change: transform;
+    animation: glow-drift 22s $ease-in-out infinite alternate;
+
+    &--green {
+      top: -18%; left: -22%;
+      width: 80vmax; height: 80vmax;
+      background: radial-gradient(circle, rgba($forest, 0.13), rgba($forest, 0) 62%);
+      @include media-breakpoint-up(lg) { top: -35%; left: -20%; width: 70vmax; height: 70vmax; }
+    }
+    &--gold {
+      right: -30%; bottom: -12%;
+      width: 70vmax; height: 70vmax;
+      background: radial-gradient(circle, rgba(#E4BB74, 0.32), rgba(#E4BB74, 0) 60%);
+      animation-duration: 28s;
+      animation-direction: alternate-reverse;
+      @include media-breakpoint-up(lg) { right: -12%; bottom: -30%; width: 60vmax; height: 60vmax; }
+    }
+  }
+
+  &__veins {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    path {
+      fill: none;
+      stroke: $champagne;
+      stroke-width: 1.1;
+      stroke-linecap: round;
+      opacity: 0.55;
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: vein-draw 4.5s $ease-in-out forwards;
+      animation-delay: calc(var(--intro) + 0.4s + var(--n) * 0.5s);
+      &.is-thin { stroke: $forest; opacity: 0.2; stroke-width: 0.8; }
+    }
+  }
+}
+
+// ─── Halo ao redor da mesa ───
+.hero-halo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  &__pulse {
+    position: absolute;
+    inset: 9%;
+    border: 1px solid rgba($champagne, 0.55);
+    border-radius: 50%;
+    opacity: 0;
+    animation: halo-pulse 9s $ease-out infinite;
+    animation-delay: calc(var(--intro) + 1.2s + var(--n) * 3s);
+  }
+
+  // satélite champagne em órbita lenta
+  &__orbit {
+    position: absolute;
+    inset: 3%;
+    border: 1px dashed rgba($forest, 0.14);
+    border-radius: 50%;
+    animation: orbit-spin 60s linear infinite;
+    i {
+      position: absolute;
+      top: -4px; left: 50%;
+      width: 8px; height: 8px;
+      margin-left: -4px;
+      border-radius: 50%;
+      background: $champagne;
+      box-shadow: 0 0 0 4px rgba($champagne, 0.22), 0 0 18px 2px rgba(#E4BB74, 0.7);
     }
   }
 }
@@ -187,12 +283,15 @@
     object-fit: contain;
     opacity: 0;
     transition: opacity 0.9s $ease-out;
-    &.is-active { opacity: 1; }
   }
+  // a classe fica no <picture>, não no <img>
+  &__posters picture.is-active img { opacity: 1; }
 
   &__canvas {
     position: absolute;
     inset: 0;
+    // desktop: o canvas sobe por baixo da navbar de vidro, então a mesa ampliada não é cortada
+    @include media-breakpoint-up(lg) { top: calc((var(--nav-h) + 1.5rem) * -1); }
     opacity: 0;
     transition: opacity 0.9s $ease-out;
   }
@@ -221,7 +320,7 @@
     align-items: baseline;
     gap: 0.75rem;
     margin: 0;
-    animation: hero-fade 1s $ease-out 1.25s both;
+    animation: hero-fade 1s $ease-out intro(1.25s) both;
   }
   &__count { @include eyebrow; font-size: 0.625rem; color: $ink-muted; }
   &__name { font-family: $font-serif; font-size: 1.25rem; font-style: italic; color: $forest; }
@@ -240,7 +339,7 @@
     color: $ink-muted;
     cursor: pointer;
     animation: hero-up 0.9s $ease-out both;
-    animation-delay: calc(1.2s + var(--i) * 0.07s);
+    animation-delay: calc(var(--intro) + 1.2s + var(--i) * 0.07s);
 
     &[aria-checked='true'] { color: $forest; }
   }
@@ -277,7 +376,8 @@
   isolation: isolate;
 
   &--solid {
-    padding: 0 1.75rem;
+    padding: 0 2rem;
+    border-radius: $r-pill;
     background: $forest;
     color: $offwhite;
     overflow: hidden;
@@ -296,19 +396,11 @@
 
   &--line {
     color: $forest;
-    span { position: relative; padding-bottom: 0.3rem; }
-    span::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 1px;
-      background: currentColor;
-      transform-origin: left;
-      transition: transform 0.6s $ease-out;
-    }
-    &:hover span::after { transform: scaleX(0.35); }
+    padding: 0 1.75rem;
+    border: 1px solid rgba($forest, 0.28);
+    border-radius: $r-pill;
+    transition: background 0.5s $ease-out, border-color 0.5s;
+    &:hover { background: rgba($forest, 0.06); border-color: $forest; }
   }
 }
 
@@ -321,3 +413,12 @@
   0% { background-position: 0 -100%; }
   100% { background-position: 0 250%; }
 }
+
+@keyframes glow-drift { from { transform: translate3d(0, 0, 0) scale(1); } to { transform: translate3d(6%, 8%, 0) scale(1.12); } }
+@keyframes vein-draw { to { stroke-dashoffset: 0; } }
+@keyframes halo-pulse {
+  0% { opacity: 0; transform: scale(0.82); }
+  18% { opacity: 0.7; }
+  100% { opacity: 0; transform: scale(1.32); }
+}
+@keyframes orbit-spin { to { transform: rotate(360deg); } }

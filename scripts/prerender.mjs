@@ -8,7 +8,7 @@ const ssrEntry = readdirSync('dist-ssr').find((f) => f.startsWith('entry-server'
 const { render } = await import(pathToFileURL(resolve('dist-ssr', ssrEntry)).href);
 
 let html = readFileSync(`${dist}/index.html`, 'utf8');
-html = html.replace('<div id="root"></div>', `<div id="root">${render()}</div>`);
+html = html.replace('<div id="root"></div>', `<div id="root">${await render()}</div>`);
 
 // CSS inline (evita uma requisição bloqueante no mobile)
 html = html.replace(/<link rel="stylesheet"[^>]*href="(\/assets\/[^"]+\.css)"[^>]*>/, (_, href) => {

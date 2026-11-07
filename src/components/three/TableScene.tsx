@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Environment, Lightformer, OrbitControls } from '@react-three/drei';
+import { Environment, Lightformer, OrbitControls, Sparkles } from '@react-three/drei';
 import type { OrbitControls as OrbitControlsImpl } from 'three-stdlib';
-import { Vector3 } from 'three';
+import { MathUtils, Vector3, type Group, type PerspectiveCamera, type PointLight } from 'three';
 import type { DeviceTier } from '../../lib/device';
 import { TableModel } from './TableModel';
 import { BakedShadow } from './BakedShadow';
@@ -39,6 +39,67 @@ function ZoomRig({ level, controls }: { level: number; controls: React.RefObject
   return null;
 }
 
+/**
+ * Coreografia da peça: giro de entrada, giro a cada troca de pedra, flutuação suave e
+ * inclinação leve seguindo o cursor. Tudo por interpolação exponencial (sem easing abrupto).
+ */
+function Choreo({ children, materialId, started, reduced }: { children: React.ReactNode; materialId: string; started: React.RefObject<boolean>; reduced: boolean }) {
+  const group = useRef<Group>(null);
+  const angle = useRef(0);
+  const target = useRef(0);
+  const introDone = useRef(false);
+  const first = useRef(true);
+
+  useEffect(() => {
+    if (first.current) { first.current = false; return; }
+    if (!reduced) target.current += Math.PI; // meia volta a cada pedra nova
+  }, [materialId, reduced]);
+
+  useFrame(({ clock, pointer }, dt) => {
+    const g = group.current;
+    if (!g || reduced) return;
+    if (started.current && !introDone.current) { introDone.current = true; target.current += Math.PI * 2; }
+    const k = Math.min(1, dt * 2);
+    angle.current += (target.current - angle.current) * k;
+    const remaining = Math.min(1, Math.max(0, (target.current - angle.current) / Math.PI));
+    g.rotation.y = angle.current;
+    g.scale.setScalar(1 + 0.025 * remaining);
+    g.position.y = Math.sin(clock.elapsedTime * 0.9) * 0.012 + remaining * 0.03;
+    g.rotation.x = MathUtils.damp(g.rotation.x, pointer.y * 0.045, 3, dt);
+    g.rotation.z = MathUtils.damp(g.rotation.z, -pointer.x * 0.04, 3, dt);
+  });
+
+  return <group ref={group}>{children}</group>;
+}
+
+/**
+ * O canvas se estende `top` px acima do palco (por baixo da navbar de vidro) sem mudar o
+ * enquadramento: a projeção continua a do palco original, só há mais área desenhada em cima.
+ */
+function ViewExtend({ top }: { top: number }) {
+  const camera = useThree((s) => s.camera) as PerspectiveCamera;
+  const size = useThree((s) => s.size);
+  useLayoutEffect(() => {
+    const h = size.height - top;
+    camera.aspect = size.width / h;
+    if (top > 0) camera.setViewOffset(size.width, h, 0, -top, size.width, size.height);
+    else camera.clearViewOffset();
+    camera.updateProjectionMatrix();
+  }, [camera, size, top]);
+  return null;
+}
+
+/** Ponto de luz quente que percorre a peça e faz o polimento da pedra reluzir. */
+function Glint({ reduced }: { reduced: boolean }) {
+  const light = useRef<PointLight>(null);
+  useFrame(({ clock }) => {
+    if (!light.current || reduced) return;
+    const t = clock.elapsedTime * 0.5;
+    light.current.position.set(Math.cos(t) * 1.7, 1.25 + Math.sin(t * 1.6) * 0.25, Math.sin(t) * 1.7);
+  });
+  return <pointLight ref={light} position={[1.7, 1.25, 0]} color="#FFE3B0" intensity={5} distance={6} decay={2} />;
+}
+
 function Studio({ tier }: { tier: DeviceTier }) {
   return (
     <>
@@ -64,6 +125,20 @@ export default function TableScene({ materialId, tier, reducedMotion, onReady, c
   const [visible, setVisible] = useState(true);
   const [zoom, setZoom] = useState(1);
   const [interacted, setInteracted] = useState(false);
+  const started = useRef(false);
+  const [extend, setExtend] = useState(0);
+
+  // quanto o canvas ultrapassa o palco por cima (definido no CSS do Hero)
+  useEffect(() => {
+    const el = wrapRef.current;
+    const stage = el?.closest('.hero-stage');
+    if (!el || !stage || capture) return;
+    const measure = () => setExtend(Math.max(0, Math.round(stage.getBoundingClientRect().top - el.getBoundingClientRect().top)));
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [capture]);
 
   // pausa o render quando o hero sai da tela
   useEffect(() => {
@@ -86,12 +161,28 @@ export default function TableScene({ materialId, tier, reducedMotion, onReady, c
         className="stage3d__canvas"
         dpr={capture ? 2 : tier === 'low' ? [1, 1.5] : [1, 2]}
         frameloop={visible ? 'always' : 'never'}
-        camera={{ position: CAMERA_POSITION, fov: 30, near: 0.1, far: 20 }}
+        camera={{ position: CAMERA_POSITION, fov: 30, near: 0.1, far: 20, manual: true }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance', preserveDrawingBuffer: capture }}
         aria-hidden="true"
       >
+        <ViewExtend top={extend} />
         <Studio tier={tier} />
-        <TableModel materialId={materialId} tier={tier} onReady={onReady} />
+        {!capture && <Glint reduced={reducedMotion} />}
+        <Choreo materialId={materialId} started={started} reduced={reducedMotion || capture}>
+          <TableModel materialId={materialId} tier={tier} onReady={() => { started.current = true; onReady(); }} />
+        </Choreo>
+        {!capture && (
+          <Sparkles
+            count={tier === 'low' ? 22 : 46}
+            scale={[2.1, 1.3, 2.1]}
+            position={[0, 0.42, 0]}
+            size={tier === 'low' ? 3 : 3.6}
+            speed={reducedMotion ? 0 : 0.28}
+            opacity={0.85}
+            color="#E4BB74"
+            noise={0.6}
+          />
+        )}
         <BakedShadow />
         <OrbitControls
           ref={controls}
@@ -115,15 +206,6 @@ export default function TableScene({ materialId, tier, reducedMotion, onReady, c
           <span className="stage3d__hint" aria-hidden="true">Arraste para girar</span>
           <button type="button" onClick={() => setZoom((z) => Math.max(0, z - 1))} disabled={zoom === 0} aria-label="Aproximar">+</button>
           <button type="button" onClick={() => setZoom((z) => Math.min(2, z + 1))} disabled={zoom === 2} aria-label="Afastar">−</button>
-          <button
-            type="button"
-            onClick={() => { setZoom(1); controls.current?.reset(); setInteracted(false); }}
-            aria-label="Restaurar visualização"
-          >
-            <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-              <path d="M3 8a5 5 0 1 0 1.6-3.7M3 2.5v2.5h2.5" fill="none" stroke="currentColor" strokeWidth="1.2" />
-            </svg>
-          </button>
         </div>
       )}
     </div>

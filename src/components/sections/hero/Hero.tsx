@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { materials } from '../../../data/materials';
 import { scrollToHash } from '../../../lib/scroll';
+import { HeroBackdrop, HeroHalo } from './HeroBackdrop';
 import { HeroStage } from './HeroStage';
 import { MaterialSelector } from './MaterialSelector';
 import './Hero.scss';
@@ -17,6 +18,7 @@ export function Hero() {
 
   return (
     <section id="home" className="hero" aria-labelledby="hero-title">
+      <HeroBackdrop />
       <div className="hero__grid">
         <div className="hero__head">
           <p className="hero__eyebrow">
@@ -37,6 +39,7 @@ export function Hero() {
             <span>Mesa lateral</span>
           </div>
           <div className="hero__viewport">
+            <HeroHalo />
             <HeroStage materialId={materialId} />
           </div>
           <MaterialSelector value={materialId} onChange={setMaterialId} />

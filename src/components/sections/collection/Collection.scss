@@ -1,0 +1,331 @@
+@import '../../../styles/mixins';
+
+.collection {
+  position: relative;
+  padding: clamp(5rem, 12vw, 9rem) 1.5rem clamp(4rem, 8vw, 6rem);
+  background: $sand;
+  // fora da tela não custa layout/pintura (ilustrações SVG são pesadas no 1º frame)
+  content-visibility: auto;
+  contain-intrinsic-size: auto 2400px;
+  @include media-breakpoint-up(lg) { padding-inline: clamp(2rem, 4vw, 4.5rem); contain-intrinsic-size: auto 1900px; }
+
+  // fundo: um arco fino de ateliê e um brilho quente
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  &::before {
+    top: -18vw; right: -22vw;
+    width: 70vw; aspect-ratio: 1;
+    border: 1px solid rgba($champagne, 0.4);
+  }
+  &::after {
+    bottom: -30vw; left: -26vw;
+    width: 80vw; aspect-ratio: 1;
+    background: radial-gradient(circle, rgba($offwhite, 0.7), rgba($offwhite, 0) 65%);
+  }
+  > *:not(dialog) { position: relative; z-index: 1; }
+
+  &__head {
+    display: grid;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: 1fr minmax(0, 22rem);
+      align-items: end;
+      margin-bottom: 3.5rem;
+    }
+
+    h2 {
+      margin: 0.75rem 0 0;
+      font-weight: 300;
+      font-size: clamp(2.75rem, 8vw, 6rem);
+      color: $forest;
+      em { font-style: italic; }
+    }
+  }
+  &__index { @include eyebrow; margin: 0; font-size: 0.625rem; color: $ink-muted; }
+  &__lead { margin: 0; max-width: 34ch; line-height: 1.7; color: $stone-green; }
+
+  &__toolbar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+    @include media-breakpoint-up(lg) { flex-direction: row; align-items: center; justify-content: space-between; }
+  }
+
+  // botão de destaque: abre o catálogo completo
+  &__catalog {
+    @include eyebrow;
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 0.9rem;
+    min-height: 48px;
+    padding: 0 1.6rem;
+    border: 0;
+    border-radius: $r-pill;
+    background: $forest;
+    color: $offwhite;
+    cursor: pointer;
+    box-shadow: 0 14px 26px -14px rgba($forest, 0.7);
+    transition: transform 0.5s $ease-out, background 0.4s, color 0.4s;
+    svg { transition: transform 0.6s $ease-out; }
+    &:hover, &:focus-visible { background: $champagne; color: $forest; transform: translateY(-2px); svg { transform: translateX(0.4rem); } }
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    // mobile: uma linha rolável
+    @media (max-width: 767.98px) {
+      flex-wrap: nowrap;
+      margin-inline: -1.5rem;
+      padding-inline: 1.5rem;
+      max-width: calc(100% + 3rem);
+      overflow-x: auto;
+      scrollbar-width: none;
+      &::-webkit-scrollbar { display: none; }
+      button { flex: none; }
+    }
+
+    button {
+      @include eyebrow;
+      min-height: 44px;
+      padding: 0 1.25rem;
+      border: 1px solid rgba($forest, 0.22);
+      border-radius: $r-pill;
+      background: rgba($offwhite, 0.35);
+      font-size: 0.6875rem;
+      color: $stone-green;
+      cursor: pointer;
+      transition: background 0.5s $ease-out, color 0.5s, border-color 0.5s, transform 0.5s $ease-out;
+      &:hover { border-color: $forest; transform: translateY(-1px); }
+      &[aria-pressed='true'] { background: $forest; border-color: $forest; color: $offwhite; }
+    }
+  }
+
+  &__note {
+    @include eyebrow;
+    margin: 2rem 0 0;
+    font-size: 0.5625rem;
+    letter-spacing: 0.18em;
+    color: $ink-muted;
+  }
+}
+
+// ─── Cartão de peça (sem fundo branco: cada peça tem seu tom) ───
+.slide { width: min(80vw, 21rem); @include media-breakpoint-up(md) { width: 23rem; } @include media-breakpoint-up(xl) { width: 25rem; } }
+
+.piece {
+  position: relative; // ancora a área clicável do botão
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  height: 100%;
+
+  &--t0 { --a: #dde4da; --b: #c3cfc2; }
+  &--t1 { --a: #ecdfc9; --b: #d8c6a4; }
+  &--t2 { --a: #e5e2d8; --b: #cbc7b8; }
+
+  &__art {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: $r-lg;
+    background:
+      radial-gradient(70% 55% at 50% 38%, rgba(#fff, 0.45), rgba(#fff, 0) 70%),
+      linear-gradient(165deg, var(--a), var(--b));
+    isolation: isolate;
+    transition: transform 0.9s $ease-out, box-shadow 0.9s $ease-out;
+
+    // pedestal circular que respira no hover
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 11%;
+      border: 1px solid rgba($forest, 0.18);
+      border-radius: 50%;
+      transition: transform 1.2s $ease-out, border-color 0.8s;
+      z-index: -1;
+    }
+    .product-art {
+      position: absolute;
+      inset: 6% 0 0;
+      width: 100%;
+      height: 94%;
+      transition: transform 1.2s $ease-out;
+      transform-origin: 50% 85%;
+    }
+  }
+
+  &:hover &__art, &:focus-within &__art { transform: translateY(-4px); box-shadow: 0 28px 40px -28px rgba($forest, 0.55); }
+  &:hover &__art::before, &:focus-within &__art::before { transform: scale(1.07); border-color: rgba($forest, 0.4); }
+  &:hover &__art .product-art, &:focus-within &__art .product-art { transform: scale(1.05) translateY(-1.5%); }
+
+  &__meta { display: grid; gap: 0.3rem; padding-inline: 0.5rem; }
+  &__kicker {
+    @include eyebrow;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0 0 0.25rem;
+    font-size: 0.625rem;
+    color: $ink-muted;
+  }
+  &__name {
+    margin: 0;
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: $forest;
+  }
+  &__stone { @include eyebrow; margin: 0; font-size: 0.5625rem; letter-spacing: 0.14em; color: $ink-muted; }
+  &__desc { margin: 0.5rem 0 0.5rem; font-size: 0.9375rem; line-height: 1.6; color: $stone-green; }
+
+  &__open {
+    @include eyebrow;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.9rem;
+    justify-self: start;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $forest;
+    cursor: pointer;
+
+    &::after { content: ''; position: absolute; inset: 0; border-radius: $r-lg; }
+    svg { transition: transform 0.7s $ease-out; }
+  }
+  &:hover &__open svg { transform: translateX(0.6rem); }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// ─── Painel de detalhe ───
+.piece-dialog {
+  width: min(62rem, calc(100vw - 1.5rem));
+  max-height: calc(100svh - 1.5rem);
+  padding: 0;
+  border: 0;
+  background: $offwhite;
+  color: $stone-green;
+  border-radius: $r-lg;
+  overflow: auto;
+
+  &[open] { display: grid; animation: dlg-in 0.7s $ease-out both; }
+  &::backdrop { background: rgba($forest, 0.62); animation: dlg-fade 0.6s $ease-out both; }
+
+  @include media-breakpoint-up(md) { grid-template-columns: 1fr 1fr; }
+
+  &__art {
+    position: relative;
+    aspect-ratio: 1;
+    margin: 0.75rem;
+    border-radius: calc(#{$r-lg} - 0.5rem);
+    background: radial-gradient(70% 55% at 50% 38%, rgba(#fff, 0.45), rgba(#fff, 0) 70%), linear-gradient(165deg, #ecdfc9, #d8c6a4);
+    .product-art { position: absolute; inset: 4% 0 0; width: 100%; height: 96%; }
+    @include media-breakpoint-up(md) { aspect-ratio: auto; min-height: 28rem; }
+  }
+  &__body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.75rem 1.5rem 2rem;
+    @include media-breakpoint-up(md) { padding: 3rem; }
+  }
+  &__eyebrow { @include eyebrow; margin: 0; font-size: 0.625rem; color: $ink-muted; }
+  h3 { margin: 0; font-size: clamp(2.5rem, 6vw, 3.75rem); font-weight: 300; font-style: italic; color: $forest; }
+  &__text { margin: 0; line-height: 1.7; }
+  &__facts {
+    display: grid;
+    gap: 0.75rem;
+    margin: 0.5rem 0 0;
+    div { padding-top: 0.75rem; border-top: 1px solid rgba($stone-green, 0.16); }
+    dt { @include eyebrow; font-size: 0.5625rem; color: $ink-muted; }
+    dd { margin: 0.25rem 0 0; font-family: $font-serif; font-size: 1.2rem; color: $forest; }
+  }
+  &__note { margin: 0; font-size: 0.75rem; color: $ink-muted; }
+  &__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem 1.75rem; margin-top: 0.75rem; }
+  &__close {
+    @include eyebrow;
+    min-height: 44px;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $forest;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.45em;
+    text-decoration-thickness: 1px;
+  }
+}
+
+@keyframes dlg-in { from { opacity: 0; transform: translateY(24px) scale(0.98); } to { opacity: 1; transform: none; } }
+@keyframes dlg-fade { from { opacity: 0; } to { opacity: 1; } }
+
+// ─── Catálogo completo ───
+.catalog-dialog {
+  width: min(70rem, calc(100vw - 1.5rem));
+  max-height: calc(100svh - 1.5rem);
+  padding: clamp(1.25rem, 3vw, 2.25rem);
+  border: 0;
+  border-radius: $r-lg;
+  background: $offwhite;
+  color: $stone-green;
+  overflow: auto;
+  &[open] { animation: dlg-in 0.7s $ease-out both; }
+  &::backdrop { background: rgba($forest, 0.62); animation: dlg-fade 0.6s $ease-out both; }
+
+  &__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; }
+  &__eyebrow { @include eyebrow; margin: 0; font-size: 0.625rem; color: $ink-muted; }
+  h3 { margin: 0.5rem 0 0; font-size: clamp(2.25rem, 6vw, 3.5rem); font-weight: 300; font-style: italic; color: $forest; }
+  &__close {
+    display: grid; place-items: center; flex: none;
+    width: 48px; height: 48px;
+    border: 1px solid rgba($forest, 0.25); border-radius: 50%;
+    background: transparent; color: $forest; cursor: pointer;
+    transition: background 0.4s, color 0.4s, transform 0.5s $ease-out;
+    &:hover, &:focus-visible { background: $forest; color: $offwhite; transform: rotate(90deg); }
+  }
+
+  &__grid {
+    display: grid; gap: 1rem; margin: 0; padding: 0; list-style: none;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    @include media-breakpoint-up(lg) { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.25rem; }
+  }
+}
+.catalog-card {
+  --a: #dde4da; --b: #c3cfc2;
+  display: flex; flex-direction: column; gap: 0.2rem;
+  width: 100%; padding: 0.6rem 0.6rem 1rem;
+  border: 0; border-radius: $r-md;
+  background: transparent; text-align: left; cursor: pointer;
+  transition: transform 0.6s $ease-out, background 0.5s;
+  &.piece--t1 { --a: #ecdfc9; --b: #d8c6a4; }
+  &.piece--t2 { --a: #e5e2d8; --b: #cbc7b8; }
+  &:hover, &:focus-visible { transform: translateY(-4px); background: rgba($sand, 0.6); }
+  &__art {
+    display: block; position: relative; aspect-ratio: 4 / 5; margin-bottom: 0.7rem; overflow: hidden;
+    border-radius: calc(#{$r-lg} - 0.75rem);
+    background: radial-gradient(70% 55% at 50% 38%, rgba(#fff, 0.45), rgba(#fff, 0) 70%), linear-gradient(165deg, var(--a), var(--b));
+    .product-art { position: absolute; inset: 6% 0 0; width: 100%; height: 94%; }
+  }
+  &__kicker { @include eyebrow; font-size: 0.5625rem; color: $ink-muted; padding-inline: 0.5rem; }
+  &__name { font-family: $font-serif; font-size: 1.75rem; font-style: italic; color: $forest; padding-inline: 0.5rem; }
+}

@@ -14,3 +14,6 @@
 @mixin reduced-motion {
   @media (prefers-reduced-motion: reduce) { @content; }
 }
+
+// Atraso da animação de entrada = duração da tela de carregamento (--intro, definida em Loader.scss)
+@function intro($delay) { @return calc(var(--intro) + #{$delay}); }

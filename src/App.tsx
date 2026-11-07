@@ -1,22 +1,27 @@
+import { lazy, Suspense } from 'react';
+import { Footer } from './components/layout/Footer';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/hero/Hero';
-import { SectionPlaceholder } from './components/sections/SectionPlaceholder';
+import { Loader } from './components/ui/Loader';
+
+// Tudo abaixo da primeira dobra vira um chunk próprio: a hidratação é adiada e fatiada pelo
+// React (o HTML pré-renderizado continua na página), mantendo o TBT baixo.
+export const loadBelowFold = () => import('./components/sections/BelowFold');
+const BelowFold = lazy(loadBelowFold);
 
 export default function App() {
   return (
     <>
+      <Loader />
       <a className="skip-link" href="#main">Pular para o conteúdo</a>
       <Navbar />
       <main id="main" tabIndex={-1}>
         <Hero />
-        {/* Seções abaixo são provisórias — próximas etapas */}
-        <SectionPlaceholder id="manifesto" index="02 — Manifesto" title="A beleza precisa ser sentida." tone="forest" />
-        <SectionPlaceholder id="materiais" index="03 — Materiais" title="A beleza da pedra." />
-        <SectionPlaceholder id="colecao" index="04 — Coleção" title="Peças de design." tone="sand" />
-        <SectionPlaceholder id="ambientes" index="05 — Ambientes" title="Inspiração e composição." />
-        <SectionPlaceholder id="sobre" index="06 — Sobre a Vert" title="Design que encontra a natureza." tone="sand" />
-        <SectionPlaceholder id="contato" index="07 — Contato" title="Seu espaço conta uma história." tone="forest" />
+        <Suspense fallback={null}>
+          <BelowFold />
+        </Suspense>
       </main>
+      <Footer />
     </>
   );
 }

@@ -1,0 +1,77 @@
+@import '../../styles/mixins';
+
+.carousel {
+  position: relative;
+
+  &__track {
+    display: flex;
+    gap: 1rem;
+    margin-inline: -1.5rem;
+    padding: 0.5rem 1.5rem 1.5rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.5rem;
+    scrollbar-width: none;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar { display: none; }
+    &.is-dragging { scroll-snap-type: none; cursor: grabbing; user-select: none; }
+    &:focus-visible { outline-offset: -4px; border-radius: $r-md; }
+
+    @include media-breakpoint-up(md) { gap: 1.5rem; }
+    @include media-breakpoint-up(lg) {
+      margin-inline: calc(clamp(2rem, 4vw, 4.5rem) * -1);
+      padding-inline: clamp(2rem, 4vw, 4.5rem);
+      scroll-padding-inline: clamp(2rem, 4vw, 4.5rem);
+    }
+
+    > [data-slide] { flex: 0 0 auto; scroll-snap-align: start; }
+  }
+
+  &__bar {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  &__progress {
+    position: relative;
+    flex: 1;
+    height: 3px;
+    border-radius: $r-pill;
+    background: rgba($stone-green, 0.14);
+    overflow: hidden;
+    i {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: $forest;
+      transform-origin: left;
+      transition: transform 0.4s $ease-out;
+    }
+  }
+
+  &__buttons { display: flex; gap: 0.6rem; }
+  &__buttons button {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid rgba($forest, 0.25);
+    border-radius: 50%;
+    background: rgba($offwhite, 0.7);
+    color: $forest;
+    cursor: pointer;
+    transition: transform 0.5s $ease-out, background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.5s $ease-out;
+    &:hover:not(:disabled), &:focus-visible {
+      background: $forest;
+      color: $offwhite;
+      border-color: $forest;
+      transform: scale(1.06);
+      box-shadow: 0 12px 24px -10px rgba($forest, 0.6);
+    }
+    &:disabled { opacity: 0.35; cursor: default; }
+  }
+}

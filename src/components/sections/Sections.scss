@@ -1,0 +1,400 @@
+@import '../../styles/mixins';
+
+// ─── Utilitários compartilhados ───
+.eyebrow-light, .eyebrow-dark { @include eyebrow; margin: 0; font-size: 0.625rem; }
+.eyebrow-light { color: rgba($offwhite, 0.75); }
+.eyebrow-dark { color: $ink-muted; }
+
+@mixin pad { padding: clamp(4rem, 10vw, 8rem) 1.5rem; @include media-breakpoint-up(lg) { padding-inline: clamp(2rem, 4vw, 4.5rem); } }
+@mixin head-grid {
+  display: grid;
+  gap: 1.25rem;
+  margin-bottom: clamp(2rem, 5vw, 3.5rem);
+  @include media-breakpoint-up(lg) { grid-template-columns: 1fr minmax(0, 24rem); align-items: end; }
+  h2 { margin: 0.75rem 0 0; font-weight: 300; font-size: clamp(2.75rem, 8vw, 6rem); color: $forest; em { font-style: italic; } }
+  > p { margin: 0; max-width: 36ch; line-height: 1.7; }
+}
+
+.btn-vert--light {
+  padding: 0 2rem;
+  border-radius: $r-pill;
+  background: $offwhite;
+  color: $forest;
+  transition: background 0.5s $ease-out, color 0.5s, transform 0.5s $ease-out;
+  &:hover, &:focus-visible { background: $champagne; color: $forest; transform: translateY(-2px); }
+  &.is-disabled { opacity: 0.78; cursor: not-allowed; &:hover { background: $offwhite; transform: none; } }
+}
+
+// ─── Manifesto ───
+.manifesto {
+  position: relative;
+  @include pad;
+  background: $forest;
+  color: rgba($offwhite, 0.86);
+
+  &__inner { position: relative; z-index: 1; max-width: 60rem; }
+  &__title {
+    margin: 1.5rem 0 2rem;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 7.4vw, 6rem);
+    line-height: 1.02;
+    color: $offwhite;
+    span { display: inline-block; margin-right: 0.26em; }
+  }
+  &__text { max-width: 46ch; margin: 0 0 2rem; font-size: clamp(1.05rem, 2vw, 1.3rem); line-height: 1.7; }
+  &__sign { @include eyebrow; margin: 0; color: $champagne; }
+
+  // palavra a palavra, ao entrar na tela
+  @media (scripting: enabled) {
+    &__title span { opacity: 0.5; transform: translateY(0.25em); transition: opacity 0.9s $ease-out, transform 1.1s $ease-out; transition-delay: calc(var(--w) * 55ms); }
+    &__inner.is-in &__title span { opacity: 1; transform: none; }
+  }
+
+  &__values {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: 1rem;
+    margin: clamp(3rem, 7vw, 5rem) 0 0;
+    padding: 0;
+    list-style: none;
+    @include media-breakpoint-up(md) { grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  }
+  &__value {
+    padding: 1.75rem;
+    border: 1px solid rgba($offwhite, 0.14);
+    border-radius: $r-md;
+    background: rgba($offwhite, 0.05);
+    transition: background 0.6s $ease-out, transform 0.7s $ease-out;
+    &:hover { background: rgba($offwhite, 0.1); transform: translateY(-4px); }
+    span { @include eyebrow; font-size: 0.625rem; color: $champagne; }
+    h3 { margin: 0.9rem 0 0.6rem; font-size: 1.75rem; font-weight: 300; font-style: italic; color: $offwhite; }
+    p { margin: 0; line-height: 1.65; opacity: 0.85; }
+  }
+
+  &__ring {
+    position: absolute;
+    border: 1px solid rgba($champagne, 0.28);
+    border-radius: 50%;
+    pointer-events: none;
+    &--a { top: -22vw; right: -18vw; width: 60vw; aspect-ratio: 1; }
+    &--b { top: -10vw; right: -6vw; width: 36vw; aspect-ratio: 1; border-style: dashed; border-color: rgba($champagne, 0.2); }
+  }
+}
+
+// ─── Materiais ───
+.materials {
+  @include pad;
+  background: $offwhite;
+
+  &__head { @include head-grid; }
+
+  &__layout {
+    display: grid;
+    gap: 1.25rem;
+    @include media-breakpoint-up(lg) { grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2rem; align-items: stretch; }
+  }
+
+  &__stage {
+    position: relative;
+    min-height: 26rem;
+    border-radius: $r-lg;
+    overflow: hidden;
+    background: $sand;
+    isolation: isolate;
+    @include media-breakpoint-up(lg) { min-height: 34rem; }
+
+    img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.06);
+      transition: opacity 0.9s $ease-out, transform 6s $ease-out;
+      &.is-active { opacity: 1; transform: scale(1); }
+    }
+    &:hover img.is-active { transform: scale(1.08); }
+    &::after { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(#000, 0) 45%, rgba(#0c1d18, 0.7)); }
+  }
+
+  &__caption {
+    position: absolute;
+    z-index: 2;
+    inset: auto 0 0;
+    padding: clamp(1.25rem, 3vw, 2.25rem);
+    color: $offwhite;
+    span { @include eyebrow; font-size: 0.625rem; color: rgba($offwhite, 0.8); }
+    h3 { margin: 0.5rem 0; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; font-style: italic; color: $offwhite; }
+    p { max-width: 40ch; margin: 0; line-height: 1.6; opacity: 0.92; }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    button {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      min-height: 4.5rem;
+      padding: 0.6rem 1.25rem 0.6rem 0.6rem;
+      border: 1px solid rgba($forest, 0.14);
+      border-radius: $r-pill;
+      background: rgba($sand, 0.5);
+      color: $forest;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.5s $ease-out, color 0.5s, border-color 0.5s, transform 0.6s $ease-out;
+      &:hover { transform: translateX(4px); border-color: $forest; }
+      &[aria-pressed='true'] { background: $forest; color: $offwhite; border-color: $forest; }
+    }
+  }
+  &__swatch { width: 3.25rem; height: 3.25rem; flex: none; border-radius: 50%; background-size: cover; background-position: center; box-shadow: 0 0 0 2px rgba($offwhite, 0.7); }
+  &__num { @include eyebrow; font-size: 0.625rem; opacity: 0.7; }
+  &__name { font-family: $font-serif; font-size: 1.5rem; font-style: italic; }
+  &__note { margin-top: 0.75rem; padding: 0 0.75rem; font-size: 0.875rem; line-height: 1.6; color: $ink-muted; }
+}
+
+// ─── Ambientes ───
+.environments {
+  @include pad;
+  background: $sand;
+  &__head { @include head-grid; }
+}
+.slide-env { width: min(84vw, 24rem); @include media-breakpoint-up(md) { width: 26rem; } @include media-breakpoint-up(xl) { width: 28rem; } }
+.scene {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+
+  &__art {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: $r-lg;
+    background: linear-gradient(170deg, var(--from), var(--to));
+    isolation: isolate;
+    transition: transform 0.9s $ease-out, box-shadow 0.9s $ease-out;
+    .product-art { position: absolute; inset: 8% 0 0; width: 100%; height: 92%; }
+  }
+  &:hover &__art { transform: translateY(-4px); box-shadow: 0 28px 40px -28px rgba($forest, 0.55); }
+
+  // luz de janela + piso
+  &__window {
+    position: absolute;
+    top: -10%; right: -8%;
+    width: 70%; aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(#fff, 0.7), rgba(#fff, 0) 68%);
+    z-index: -1;
+  }
+  &__floor {
+    position: absolute;
+    inset: auto 0 0;
+    height: 20%;
+    background: linear-gradient(180deg, rgba($forest, 0) , rgba($forest, 0.16));
+    z-index: -1;
+  }
+  &__tag {
+    position: absolute;
+    top: 1rem; left: 1rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: $r-pill;
+    background: rgba($offwhite, 0.75);
+    backdrop-filter: blur(8px);
+    @include eyebrow;
+    font-size: 0.625rem;
+    color: $forest;
+    i { width: 8px; height: 8px; border-radius: 50%; background: $champagne; box-shadow: 0 0 0 4px rgba($champagne, 0.3); animation: tag-pulse 2.8s ease-in-out infinite; }
+  }
+  &__meta { padding-inline: 0.5rem; h3 { margin: 0 0 0.4rem; font-size: 1.9rem; font-weight: 300; font-style: italic; color: $forest; } p { margin: 0; line-height: 1.65; } }
+}
+@keyframes tag-pulse { 50% { box-shadow: 0 0 0 8px rgba($champagne, 0); } }
+
+// ─── Sobre ───
+.about {
+  @include pad;
+  display: grid;
+  gap: 2.5rem;
+  background: $offwhite;
+  @include media-breakpoint-up(lg) { grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(2rem, 5vw, 5rem); align-items: center; }
+
+  &__text {
+    h2 { margin: 0.75rem 0 1.5rem; font-weight: 300; font-size: clamp(2.5rem, 7vw, 5rem); color: $forest; em { font-style: italic; } }
+    > p:not([class]) { max-width: 50ch; margin: 0 0 1rem; line-height: 1.75; font-size: 1.0625rem; }
+  }
+  &__pillars {
+    display: grid;
+    gap: 0.75rem;
+    margin: 2rem 0 0;
+    padding: 0;
+    list-style: none;
+    @include media-breakpoint-up(md) { grid-template-columns: repeat(3, 1fr); }
+    li { padding: 1.25rem; border-radius: $r-md; background: $sand; }
+    h3 { margin: 0 0 0.4rem; font-size: 1.6rem; font-weight: 300; font-style: italic; color: $forest; }
+    p { margin: 0; font-size: 0.9375rem; line-height: 1.6; }
+  }
+
+  &__visual {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: $r-lg;
+    overflow: hidden;
+    background: $forest;
+    img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba($forest, 0) 50%, rgba($forest, 0.6)); }
+  }
+  &__sensor { position: absolute; inset: 0; pointer-events: none; }
+  &__ring { position: absolute; z-index: 1; inset: 14%; border: 1px solid rgba($offwhite, 0.45); border-radius: 50%; animation: orbit-spin 80s linear infinite; border-style: dashed; }
+  &__badge {
+    position: absolute;
+    z-index: 2;
+    inset: auto 1rem 1rem;
+    padding: 1.1rem 1.35rem;
+    border-radius: $r-md;
+    background: rgba($offwhite, 0.82);
+    backdrop-filter: blur(10px);
+    span { @include eyebrow; font-size: 0.625rem; color: $forest; }
+    p { margin: 0.35rem 0 0; font-size: 0.9375rem; line-height: 1.5; color: $stone-green; }
+  }
+}
+
+// ─── Contato (hero: formulário + peça de mármore com a logo em dourado) ───
+.contact {
+  display: grid;
+  gap: 2rem;
+  padding: clamp(3rem, 8vw, 6rem) 1.5rem;
+  background: $sand;
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: stretch;
+    min-height: 100svh;
+    padding: clamp(5rem, 9vw, 7rem) clamp(2rem, 4vw, 4.5rem);
+  }
+
+  &__left { align-self: center; }
+  h2 { margin: 1rem 0 1rem; font-weight: 300; font-size: clamp(2.1rem, 4.6vw, 4rem); color: $forest; em { font-style: italic; } }
+  &__text { margin: 0 0 1.75rem; max-width: 40ch; line-height: 1.7; }
+
+  &__form { display: grid; gap: 0.9rem; @include media-breakpoint-up(md) { grid-template-columns: 1fr 1fr; } }
+  .field { display: grid; gap: 0.4rem; &--full { grid-column: 1 / -1; } }
+  .field span { @include eyebrow; font-size: 0.625rem; color: $ink-muted; padding-left: 1.1rem; }
+  input, select, textarea {
+    width: 100%;
+    padding: 0.95rem 1.25rem;
+    border: 1px solid rgba($forest, 0.18);
+    border-radius: 1.25rem;
+    background: rgba($offwhite, 0.75);
+    color: $forest;
+    font: inherit;
+    transition: border-color 0.4s, background 0.4s, box-shadow 0.4s;
+    &::placeholder { color: rgba($stone-green, 0.55); }
+    &:hover { border-color: rgba($forest, 0.4); }
+    &:focus { outline: none; border-color: $forest; background: $offwhite; box-shadow: 0 0 0 4px rgba($champagne, 0.35); }
+  }
+  textarea { resize: vertical; min-height: 7rem; }
+  &__submit { grid-column: 1 / -1; justify-self: start; border: 0; cursor: pointer; }
+
+  &__done {
+    padding: 1.75rem;
+    border-radius: $r-md;
+    background: rgba($offwhite, 0.8);
+    h3 { margin: 0 0 0.5rem; font-size: 2rem; font-weight: 300; font-style: italic; color: $forest; }
+    p { margin: 0 0 1rem; line-height: 1.6; }
+  }
+  &__again { @include eyebrow; min-height: 44px; padding: 0; border: 0; background: none; color: $forest; text-decoration: underline; text-underline-offset: 0.45em; cursor: pointer; }
+
+  &__right { display: flex; align-items: center; }
+}
+
+// Placa de mármore verde com a logo em dourado: inclina com mouse/toque (limitada, volta ao repouso)
+.plaque {
+  --rx: 0deg; --ry: 0deg; --gx: 50%; --gy: 50%; --px: 0px; --py: 0px;
+  display: flex;
+  flex: 1;
+  min-height: 22rem;
+  @include media-breakpoint-up(lg) { height: min(36rem, 72svh); }
+  perspective: 1100px;
+  touch-action: pan-y; // rolagem vertical continua funcionando no celular
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+
+  &__body {
+    position: relative;
+    flex: 1;
+    min-height: inherit;
+    transform-style: preserve-3d;
+    transform: rotateX(var(--rx)) rotateY(var(--ry));
+    will-change: transform;
+  }
+
+  // "espessura" da placa: duas camadas escuras atrás da face
+  &__edge {
+    position: absolute;
+    inset: 0;
+    border-radius: $r-lg;
+    background: #0d241d;
+    transform: translateZ(-9px);
+    box-shadow: 0 50px 60px -30px rgba(#0c1d18, 0.75);
+    &--2 { background: #081a14; transform: translateZ(-18px); box-shadow: none; }
+  }
+
+  &__face {
+    position: absolute;
+    inset: 0;
+    border-radius: $r-lg;
+    overflow: hidden;
+    isolation: isolate;
+    background: $forest;
+    box-shadow: inset 0 0 0 1px rgba(#fff, 0.16), inset 0 -40px 80px rgba(#000, 0.3);
+  }
+  &__stone { position: absolute; inset: -4%; z-index: -3; transform: translate(var(--px), var(--py)); }
+  .is-in &__stone { background: url('/textures/verde/color-1k.webp') center / cover; }
+
+  &__sheen {
+    position: absolute; inset: -20%; z-index: -2; pointer-events: none;
+    background: linear-gradient(115deg, transparent 38%, rgba(#fff, 0.16) 50%, transparent 62%);
+    animation: plaque-sheen 9s $ease-in-out infinite;
+  }
+  // reflexo que acompanha a inclinação
+  &__glare {
+    position: absolute; inset: 0; z-index: 3; pointer-events: none;
+    background: radial-gradient(circle at var(--gx) var(--gy), rgba(#fff, 0.26), rgba(#fff, 0) 55%);
+  }
+
+  // logo: máscara do WebP + degradê dourado; desloca-se um pouco (paralaxe)
+  &__logo {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: min(72%, 30rem);
+    aspect-ratio: 2010 / 413;
+    opacity: 0;
+    transform: translate(calc(-50% + var(--px) * -0.8), calc(-50% + var(--py) * -0.8));
+    background: linear-gradient(100deg, #b8923f 0%, #f1d58f 30%, #c89b46 52%, #f6e2a8 70%, #b08431 100%);
+    background-size: 220% 100%;
+    animation: plaque-gold 9s $ease-in-out infinite;
+    filter: drop-shadow(0 1px 0 rgba(#fff, 0.35));
+    &--shadow {
+      background: rgba(#000, 0.55); animation: none; filter: blur(1px);
+      transform: translate(calc(-50% + var(--px) * -0.8), calc(-50% + var(--py) * -0.8 + 3px));
+    }
+  }
+  .is-in &__logo {
+    opacity: 1;
+    transition: opacity 1.2s $ease-out 0.3s;
+    -webkit-mask: url('/logo/vert-decor-light-720.webp') center / contain no-repeat;
+    mask: url('/logo/vert-decor-light-720.webp') center / contain no-repeat;
+  }
+}
+@keyframes plaque-sheen { 0%, 20% { transform: translateX(-60%); } 70%, 100% { transform: translateX(60%); } }
+@keyframes plaque-gold { 0%, 100% { background-position: 0 0; } 50% { background-position: 100% 0; } }
