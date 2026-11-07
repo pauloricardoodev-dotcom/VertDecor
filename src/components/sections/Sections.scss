@@ -253,11 +253,15 @@
     border-radius: $r-lg;
     overflow: hidden;
     background: $forest;
-    img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, $forest 0%, transparent) 50%, color-mix(in srgb, $forest 60%, transparent)); }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(#173b32, 0) 50%, rgba(#173b32, 0.6)); }
+    :root[data-theme='dark'] & { background: #efece4; }
+    :root[data-theme='dark'] &::after { background: linear-gradient(180deg, rgba(#173b32, 0) 55%, rgba(#173b32, 0.22)); }
   }
-  &__sensor { position: absolute; inset: 0; pointer-events: none; }
-  &__ring { position: absolute; z-index: 1; inset: 14%; border: 1px solid color-mix(in srgb, $offwhite 45%, transparent); border-radius: 50%; animation: orbit-spin 80s linear infinite; border-style: dashed; }
+  // mármore verde no tema claro, BRANCO no escuro (só é pedido quando a seção aparece)
+  &__stone { position: absolute; inset: 0; }
+  &__visual.is-in &__stone { background: url('/textures/verde/color-1k.webp') center / cover; }
+  :root[data-theme='dark'] &__visual.is-in &__stone { background-image: url('/textures/calacatta/color-1k.webp'); }
+  &__ring { position: absolute; z-index: 1; inset: 14%; border: 1px solid color-mix(in srgb, $offwhite 45%, transparent); border-radius: 50%; animation: orbit-spin 80s linear infinite; border-style: dashed; :root[data-theme='dark'] & { border-color: rgba(#173b32, 0.3); } }
   &__badge {
     position: absolute;
     z-index: 2;
@@ -361,9 +365,11 @@
     isolation: isolate;
     background: $forest;
     box-shadow: inset 0 0 0 1px rgba(#fff, 0.16), inset 0 -40px 80px rgba(#000, 0.3);
+    :root[data-theme='dark'] & { background: #f1eee7; box-shadow: inset 0 0 0 1px rgba(#fff, 0.6), inset 0 -40px 80px rgba(#173b32, 0.12); }
   }
   &__stone { position: absolute; inset: -4%; z-index: -3; transform: translate(var(--px), var(--py)); }
   .is-in &__stone { background: url('/textures/verde/color-1k.webp') center / cover; }
+  :root[data-theme='dark'] .is-in &__stone { background-image: url('/textures/calacatta/color-1k.webp'); }
 
   &__sheen {
     position: absolute; inset: -20%; z-index: -2; pointer-events: none;
@@ -400,5 +406,12 @@
     mask: url('/logo/vert-decor-light-720.webp') center / contain no-repeat;
   }
 }
+:root[data-theme='dark'] .plaque__logo:not(.plaque__logo--shadow) {
+  // ouro mais profundo para manter contraste sobre o mármore branco
+  background: linear-gradient(100deg, #8a6720 0%, #d2a84f 32%, #9c7628 54%, #dfba66 74%, #8a6720 100%);
+  background-size: 220% 100%;
+  filter: drop-shadow(0 1px 1px rgba(70, 48, 10, 0.5));
+}
+:root[data-theme='dark'] .plaque__logo--shadow { background: rgba(70, 48, 10, 0.25); }
 @keyframes plaque-sheen { 0%, 20% { transform: translateX(-60%); } 70%, 100% { transform: translateX(60%); } }
 @keyframes plaque-gold { 0%, 100% { background-position: 0 0; } 50% { background-position: 100% 0; } }

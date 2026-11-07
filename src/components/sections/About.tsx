@@ -1,12 +1,9 @@
 import { about } from '../../data/content';
-import { materials } from '../../data/materials';
-import { useNear } from '../../hooks/useNear';
 import { useReveal } from '../../hooks/useReveal';
 
 export function About() {
   const text = useReveal<HTMLDivElement>();
   const visual = useReveal<HTMLDivElement>();
-  const [nearRef, near] = useNear<HTMLSpanElement>('300px 0px');
   return (
     <section id="sobre" className="about panel" aria-labelledby="sobre-title">
       <div className="about__text reveal" ref={text}>
@@ -24,8 +21,7 @@ export function About() {
       </div>
 
       <div className="about__visual reveal" ref={visual} style={{ '--d': 1 } as React.CSSProperties}>
-        <span ref={nearRef} className="about__sensor" aria-hidden="true" />
-        {near && <img src={materials[0].textures.color1k} width={1024} height={1024} decoding="async" alt="" />}
+        <span className="about__stone" aria-hidden="true" />
         <span className="about__ring" aria-hidden="true" />
         <div className="about__badge">
           <span>Pedra + Ferro</span>

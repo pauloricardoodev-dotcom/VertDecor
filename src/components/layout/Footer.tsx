@@ -2,7 +2,6 @@ import { contact } from '../../data/contact';
 import { navigation } from '../../data/navigation';
 import { useNear } from '../../hooks/useNear';
 import { scrollToHash } from '../../lib/scroll';
-import { Logo } from '../ui/Logo';
 import './Footer.scss';
 
 /**
@@ -36,7 +35,7 @@ export function Footer() {
 
       <div className="site-footer__top">
         <div className="site-footer__brand">
-          <Logo variant="light" width={170} />
+          <span className="site-footer__logo" role="img" aria-label="Vert Decor" />
           <p>Mesas de pedra, estruturas de ferro e peças de design para ambientes com personalidade.</p>
         </div>
         <nav aria-label="Rodapé">
@@ -57,7 +56,17 @@ export function Footer() {
         </div>
       </div>
 
-      <p className="site-footer__legal">© {new Date().getFullYear()} Vert Decor. Todos os direitos reservados.</p>
+      <div className="site-footer__legal">
+        <p>© {new Date().getFullYear()} Vert Decor. Todos os direitos reservados.</p>
+        <p className="site-footer__credit">
+          Site criado por{' '}
+          <a href="https://paulodev.pauloricardoodev.workers.dev" target="_blank" rel="noopener noreferrer">
+            Paulo Ricardo Rinaldi da Silva
+            <svg viewBox="0 0 12 12" width="11" height="11" aria-hidden="true"><path d="M3 9l6-6M4 3h5v5" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+            <span className="visually-hidden"> (abre em nova aba)</span>
+          </a>
+        </p>
+      </div>
     </footer>
   );
 }

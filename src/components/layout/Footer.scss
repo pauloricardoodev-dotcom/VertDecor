@@ -1,7 +1,18 @@
 @import '../../styles/mixins';
 
+// Rodapé = laje de mármore. Tema claro: mármore verde (identidade). Tema escuro: mármore BRANCO (Calacatta).
 .site-footer {
-  @include fixed-palette;
+  // paleta local (verde por padrão = tema claro do site)
+  --f-fg: #{$offwhite-hex};
+  --f-muted: rgba(247, 245, 239, 0.78);
+  --f-accent: #d9b76a;
+  --f-hover: #f1d58f;
+  --f-line: rgba(247, 245, 239, 0.16);
+  --f-vein: #d9b76a;
+  --f-veil-a: rgba(14, 41, 34, 0.62);
+  --f-veil-b: rgba(14, 41, 34, 0.78);
+  --f-stone: url('/textures/verde/color-1k.webp');
+
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -9,21 +20,35 @@
   margin: 0.5rem 0 0;
   border-radius: $r-lg $r-lg 0 0;
   padding: clamp(3.5rem, 8vw, 6rem) 1.5rem 1.75rem;
-  background: $forest;
-  color: color-mix(in srgb, $offwhite 86%, transparent);
+  background: $forest-hex;
+  color: var(--f-fg);
   box-shadow: inset 0 0 0 1px rgba(#fff, 0.1), inset 0 -50px 90px rgba(#000, 0.28);
   @include media-breakpoint-up(lg) { padding-inline: clamp(2rem, 4vw, 4.5rem); }
+
+  :root[data-theme='dark'] & {
+    --f-fg: #{$forest-hex};
+    --f-muted: rgba(23, 59, 50, 0.8);
+    --f-accent: #7a5f2b;
+    --f-hover: #0e2922;
+    --f-line: rgba(23, 59, 50, 0.2);
+    --f-vein: #b8923f;
+    --f-veil-a: rgba(250, 248, 243, 0.7);
+    --f-veil-b: rgba(246, 243, 236, 0.86);
+    --f-stone: url('/textures/calacatta/color-1k.webp');
+    background: #f4f1ea;
+    box-shadow: inset 0 0 0 1px rgba(#fff, 0.5), inset 0 -50px 90px rgba(#173b32, 0.08);
+  }
 
   // ─── Camadas da laje ───
   &__stone, &__veins { position: absolute; inset: 0; pointer-events: none; }
 
-  // textura + véu escuro (garante contraste dos textos sobre os veios claros)
+  // textura + véu (garante contraste dos textos sobre os veios)
   &__stone {
     z-index: -4;
     transform: scale(1.04);
-    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(#0e2922, 0.62), rgba(#0e2922, 0.78)); }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, var(--f-veil-a), var(--f-veil-b)); }
   }
-  &.is-in &__stone { background: url('/textures/verde/color-1k.webp') center / cover; }
+  &.is-in &__stone { background: var(--f-stone) center / cover; }
 
   // veios dourados: se desenham quando o rodapé entra na tela
   &__veins {
@@ -32,7 +57,7 @@
     height: 100%;
     path {
       fill: none;
-      stroke: #d9b76a;
+      stroke: var(--f-vein);
       stroke-width: 1.2;
       stroke-linecap: round;
       opacity: 0.55;
@@ -53,14 +78,62 @@
     gap: 2.5rem;
     @include media-breakpoint-up(md) { grid-template-columns: 1.4fr 1fr 1fr; gap: 3rem; }
   }
-  &__brand p { max-width: 32ch; margin: 1.25rem 0 0; line-height: 1.7; }
-  h2 { @include eyebrow; margin: 0 0 1rem; font-size: 0.625rem; color: #d9b76a; font-family: $font-sans; }
+
+  // logo em máscara: usa a cor do texto, então vale para fundo verde e branco
+  &__logo {
+    display: block;
+    width: 170px;
+    aspect-ratio: 2010 / 413;
+    background: var(--f-fg);
+  }
+  &.is-in &__logo {
+    -webkit-mask: url('/logo/vert-decor-light-360.webp') center / contain no-repeat;
+    mask: url('/logo/vert-decor-light-360.webp') center / contain no-repeat;
+  }
+
+  &__brand p { max-width: 32ch; margin: 1.25rem 0 0; line-height: 1.7; color: var(--f-fg); }
+  h2 { @include eyebrow; margin: 0 0 1rem; font-size: 0.625rem; color: var(--f-accent); font-family: $font-sans; }
   ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.5rem; }
   li { font-size: 0.9375rem; }
-  a { color: $offwhite; padding-block: 0.2rem; transition: color 0.4s; &:hover, &:focus-visible { color: #f1d58f; } }
-  li span { opacity: 0.85; }
+  a { color: var(--f-fg); padding-block: 0.2rem; transition: color 0.4s; &:hover, &:focus-visible { color: var(--f-hover); } }
+  li span { color: var(--f-muted); }
 
-  &__legal { position: relative; margin: clamp(2.5rem, 6vw, 4rem) 0 0; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, $offwhite 16%, transparent); font-size: 0.8125rem; color: color-mix(in srgb, $offwhite 78%, transparent); }
+  &__legal {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    margin: clamp(2.5rem, 6vw, 4rem) 0 0;
+    padding-top: 1.25rem;
+    padding-right: 4.5rem; // espaço para o botão de tema flutuante
+    border-top: 1px solid var(--f-line);
+    font-size: 0.8125rem;
+    color: var(--f-muted);
+    p { margin: 0; }
+  }
+
+  // crédito: o nome é um link evidente (sublinhado dourado + seta que se move no hover)
+  &__credit a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35em;
+    padding-block: 0.35rem;
+    color: var(--f-fg);
+    font-weight: 500;
+    text-decoration: underline;
+    text-decoration-color: var(--f-accent);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.35em;
+    transition: color 0.4s, text-decoration-color 0.4s, text-underline-offset 0.5s $ease-out;
+    svg { flex: none; transition: transform 0.5s $ease-out; }
+    &:hover, &:focus-visible {
+      color: var(--f-hover);
+      text-decoration-thickness: 2px;
+      text-underline-offset: 0.5em;
+      svg { transform: translate(2px, -2px); }
+    }
+  }
 }
 
 @keyframes foot-vein { to { stroke-dashoffset: 0; } }

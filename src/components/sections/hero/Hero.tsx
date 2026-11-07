@@ -1,15 +1,25 @@
-import { useState } from 'react';
-import { materials } from '../../../data/materials';
+import { useEffect, useState } from 'react';
 import { scrollToHash } from '../../../lib/scroll';
 import { HeroBackdrop, HeroHalo } from './HeroBackdrop';
 import { HeroStage } from './HeroStage';
 import { MaterialSelector } from './MaterialSelector';
 import './Hero.scss';
 
+const DEFAULT_LIGHT = 'verde';
+const DEFAULT_DARK = 'calacatta';
 const TITLE_LINES = ['A natureza encontra', 'sua forma', 'mais elegante.'];
 
 export function Hero() {
-  const [materialId, setMaterialId] = useState(materials[0].id);
+  // padrão por tema: claro = mármore verde, escuro = mármore branco (a pessoa ainda pode escolher outra pedra)
+  const [materialId, setMaterialId] = useState(DEFAULT_LIGHT);
+
+  useEffect(() => {
+    const byTheme = (t: string) => (t === 'dark' ? DEFAULT_DARK : DEFAULT_LIGHT);
+    setMaterialId(byTheme(document.documentElement.dataset.theme ?? 'light'));
+    const onTheme = (e: Event) => setMaterialId(byTheme((e as CustomEvent<string>).detail));
+    window.addEventListener('vd-theme', onTheme);
+    return () => window.removeEventListener('vd-theme', onTheme);
+  }, []);
 
   const go = (e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();

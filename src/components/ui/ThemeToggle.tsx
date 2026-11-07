@@ -10,6 +10,7 @@ function apply(theme: Theme) {
   document.documentElement.dataset.theme = theme;
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', theme === 'dark' ? '#0C1713' : '#F7F5EF');
   try { localStorage.setItem(KEY, theme); } catch { /* modo privado */ }
+  window.dispatchEvent(new CustomEvent('vd-theme', { detail: theme }));
 }
 
 /** Botão flutuante (canto inferior direito) para alternar entre tema claro e escuro. */
