@@ -41,6 +41,13 @@ Lighthouse (build de produção):
 - Imagens abaixo da dobra só são pedidas quando se aproximam (`useNear`) para não disputar banda com o LCP.
 - Lighthouse: mobile oscila 88–92 (LCP ~3,1 s simulado) — está na fronteira; desktop 98–99; demais 100.
 
+## Etapa 4 — Tema claro/escuro + rodapé cru ✅ (2026-11-07)
+- Botão flutuante (canto inferior direito) alterna tema; revelação circular via View Transitions; escolha salva em `localStorage` (`vd-theme`) e aplicada por script no `<head>` (sem flash).
+- Tokens de cor viraram variáveis CSS (`src/styles/_theme.scss`); `rgba($token, a)` virou `color-mix()`. Áreas sempre verdes (Manifesto, rodapé, placa, loader, menu mobile, stage de materiais) usam `@include fixed-palette`. Hex reais para Sass/Bootstrap: `$forest-hex` etc.
+- Logo colorida troca para a clara no tema escuro (`Logo` renderiza as duas).
+- Rodapé: sem brilho/luz do cursor (só mármore + veios dourados).
+- Lighthouse: mobile 88–90 (fronteira), desktop 98.
+
 ## Pendências / decisões em aberto
 - Logo oficial usa azul petróleo `#013F5D` + dourado `#E4BB74`; a paleta do briefing é verde/champagne. Confirmar com a marca.
 - Assets provisórios: mesa procedural (`tableGeometry.ts`) e texturas procedurais (`public/textures/`).

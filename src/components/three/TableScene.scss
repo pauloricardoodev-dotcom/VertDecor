@@ -29,21 +29,21 @@
       width: 52px;
       height: 52px;
       padding: 0;
-      border: 1px solid rgba($champagne, 0.55);
+      border: 1px solid color-mix(in srgb, $champagne 55%, transparent);
       border-radius: 50%;
       background: $forest;
       color: $offwhite;
       font-size: 1.5rem;
       font-weight: 300;
       line-height: 1;
-      box-shadow: 0 10px 24px -8px rgba($forest, 0.55), inset 0 1px 0 rgba(#fff, 0.14);
+      box-shadow: 0 10px 24px -8px rgba(#0a1612, 0.55), inset 0 1px 0 rgba(#fff, 0.14);
       cursor: pointer;
       transition: transform 0.5s $ease-out, background 0.4s, color 0.4s, box-shadow 0.5s $ease-out, opacity 0.4s;
       &:hover:not(:disabled), &:focus-visible {
         transform: translateY(-2px) scale(1.06);
         background: $champagne;
         color: $forest;
-        box-shadow: 0 14px 28px -8px rgba($champagne, 0.8);
+        box-shadow: 0 14px 28px -8px color-mix(in srgb, $champagne 80%, transparent);
       }
       &:active:not(:disabled) { transform: scale(0.96); }
       &:disabled { opacity: 0.32; cursor: default; box-shadow: none; }

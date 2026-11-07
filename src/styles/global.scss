@@ -1,15 +1,11 @@
 @import 'mixins';
+@import 'theme';
 
 :root {
-  --forest: #{$forest};
-  --stone-green: #{$stone-green};
-  --sand: #{$sand};
-  --offwhite: #{$offwhite};
-  --champagne: #{$champagne};
-  --ink-muted: #{$ink-muted};
   --nav-h: 4.25rem;
   @include media-breakpoint-up(lg) { --nav-h: 5.5rem; }
 }
+@include theme-vars;
 
 html { scroll-padding-top: var(--nav-h); }
 @media (prefers-reduced-motion: no-preference) {
@@ -23,6 +19,13 @@ body {
   text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
+// logo colorida e clara conforme o tema
+.logo-themed--light { display: none !important; }
+:root[data-theme='dark'] {
+  .logo-themed--color { display: none !important; }
+  .logo-themed--light { display: block !important; }
+}
+
 body.is-locked { overflow: hidden; }
 
 h1, h2, h3 { letter-spacing: -0.01em; line-height: 1.02; }

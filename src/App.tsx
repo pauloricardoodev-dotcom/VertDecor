@@ -3,6 +3,7 @@ import { Footer } from './components/layout/Footer';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/hero/Hero';
 import { Loader } from './components/ui/Loader';
+import { ThemeToggle } from './components/ui/ThemeToggle';
 
 // Tudo abaixo da primeira dobra vira um chunk próprio: a hidratação é adiada e fatiada pelo
 // React (o HTML pré-renderizado continua na página), mantendo o TBT baixo.
@@ -22,6 +23,7 @@ export default function App() {
         </Suspense>
       </main>
       <Footer />
+      <ThemeToggle />
     </>
   );
 }

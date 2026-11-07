@@ -2,7 +2,7 @@
 
 // ─── Utilitários compartilhados ───
 .eyebrow-light, .eyebrow-dark { @include eyebrow; margin: 0; font-size: 0.625rem; }
-.eyebrow-light { color: rgba($offwhite, 0.75); }
+.eyebrow-light { color: color-mix(in srgb, $offwhite 75%, transparent); }
 .eyebrow-dark { color: $ink-muted; }
 
 @mixin pad { padding: clamp(4rem, 10vw, 8rem) 1.5rem; @include media-breakpoint-up(lg) { padding-inline: clamp(2rem, 4vw, 4.5rem); } }
@@ -27,10 +27,11 @@
 
 // ─── Manifesto ───
 .manifesto {
+  @include fixed-palette;
   position: relative;
   @include pad;
   background: $forest;
-  color: rgba($offwhite, 0.86);
+  color: color-mix(in srgb, $offwhite 86%, transparent);
 
   &__inner { position: relative; z-index: 1; max-width: 60rem; }
   &__title {
@@ -62,11 +63,11 @@
   }
   &__value {
     padding: 1.75rem;
-    border: 1px solid rgba($offwhite, 0.14);
+    border: 1px solid color-mix(in srgb, $offwhite 14%, transparent);
     border-radius: $r-md;
-    background: rgba($offwhite, 0.05);
+    background: color-mix(in srgb, $offwhite 5%, transparent);
     transition: background 0.6s $ease-out, transform 0.7s $ease-out;
-    &:hover { background: rgba($offwhite, 0.1); transform: translateY(-4px); }
+    &:hover { background: color-mix(in srgb, $offwhite 10%, transparent); transform: translateY(-4px); }
     span { @include eyebrow; font-size: 0.625rem; color: $champagne; }
     h3 { margin: 0.9rem 0 0.6rem; font-size: 1.75rem; font-weight: 300; font-style: italic; color: $offwhite; }
     p { margin: 0; line-height: 1.65; opacity: 0.85; }
@@ -74,11 +75,11 @@
 
   &__ring {
     position: absolute;
-    border: 1px solid rgba($champagne, 0.28);
+    border: 1px solid color-mix(in srgb, $champagne 28%, transparent);
     border-radius: 50%;
     pointer-events: none;
     &--a { top: -22vw; right: -18vw; width: 60vw; aspect-ratio: 1; }
-    &--b { top: -10vw; right: -6vw; width: 36vw; aspect-ratio: 1; border-style: dashed; border-color: rgba($champagne, 0.2); }
+    &--b { top: -10vw; right: -6vw; width: 36vw; aspect-ratio: 1; border-style: dashed; border-color: color-mix(in srgb, $champagne 20%, transparent); }
   }
 }
 
@@ -96,6 +97,7 @@
   }
 
   &__stage {
+    @include fixed-palette;
     position: relative;
     min-height: 26rem;
     border-radius: $r-lg;
@@ -125,7 +127,7 @@
     inset: auto 0 0;
     padding: clamp(1.25rem, 3vw, 2.25rem);
     color: $offwhite;
-    span { @include eyebrow; font-size: 0.625rem; color: rgba($offwhite, 0.8); }
+    span { @include eyebrow; font-size: 0.625rem; color: color-mix(in srgb, $offwhite 80%, transparent); }
     h3 { margin: 0.5rem 0; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 300; font-style: italic; color: $offwhite; }
     p { max-width: 40ch; margin: 0; line-height: 1.6; opacity: 0.92; }
   }
@@ -144,9 +146,9 @@
       width: 100%;
       min-height: 4.5rem;
       padding: 0.6rem 1.25rem 0.6rem 0.6rem;
-      border: 1px solid rgba($forest, 0.14);
+      border: 1px solid color-mix(in srgb, $forest 14%, transparent);
       border-radius: $r-pill;
-      background: rgba($sand, 0.5);
+      background: color-mix(in srgb, $sand 50%, transparent);
       color: $forest;
       text-align: left;
       cursor: pointer;
@@ -155,7 +157,7 @@
       &[aria-pressed='true'] { background: $forest; color: $offwhite; border-color: $forest; }
     }
   }
-  &__swatch { width: 3.25rem; height: 3.25rem; flex: none; border-radius: 50%; background-size: cover; background-position: center; box-shadow: 0 0 0 2px rgba($offwhite, 0.7); }
+  &__swatch { width: 3.25rem; height: 3.25rem; flex: none; border-radius: 50%; background-size: cover; background-position: center; box-shadow: 0 0 0 2px color-mix(in srgb, $offwhite 70%, transparent); }
   &__num { @include eyebrow; font-size: 0.625rem; opacity: 0.7; }
   &__name { font-family: $font-serif; font-size: 1.5rem; font-style: italic; }
   &__note { margin-top: 0.75rem; padding: 0 0.75rem; font-size: 0.875rem; line-height: 1.6; color: $ink-muted; }
@@ -183,7 +185,7 @@
     transition: transform 0.9s $ease-out, box-shadow 0.9s $ease-out;
     .product-art { position: absolute; inset: 8% 0 0; width: 100%; height: 92%; }
   }
-  &:hover &__art { transform: translateY(-4px); box-shadow: 0 28px 40px -28px rgba($forest, 0.55); }
+  &:hover &__art { transform: translateY(-4px); box-shadow: 0 28px 40px -28px rgba(#0a1612, 0.55); }
 
   // luz de janela + piso
   &__window {
@@ -198,7 +200,7 @@
     position: absolute;
     inset: auto 0 0;
     height: 20%;
-    background: linear-gradient(180deg, rgba($forest, 0) , rgba($forest, 0.16));
+    background: linear-gradient(180deg, color-mix(in srgb, $forest 0%, transparent) , color-mix(in srgb, $forest 16%, transparent));
     z-index: -1;
   }
   &__tag {
@@ -209,16 +211,16 @@
     gap: 0.6rem;
     padding: 0.45rem 0.9rem;
     border-radius: $r-pill;
-    background: rgba($offwhite, 0.75);
+    background: color-mix(in srgb, $offwhite 75%, transparent);
     backdrop-filter: blur(8px);
     @include eyebrow;
     font-size: 0.625rem;
     color: $forest;
-    i { width: 8px; height: 8px; border-radius: 50%; background: $champagne; box-shadow: 0 0 0 4px rgba($champagne, 0.3); animation: tag-pulse 2.8s ease-in-out infinite; }
+    i { width: 8px; height: 8px; border-radius: 50%; background: $champagne; box-shadow: 0 0 0 4px color-mix(in srgb, $champagne 30%, transparent); animation: tag-pulse 2.8s ease-in-out infinite; }
   }
   &__meta { padding-inline: 0.5rem; h3 { margin: 0 0 0.4rem; font-size: 1.9rem; font-weight: 300; font-style: italic; color: $forest; } p { margin: 0; line-height: 1.65; } }
 }
-@keyframes tag-pulse { 50% { box-shadow: 0 0 0 8px rgba($champagne, 0); } }
+@keyframes tag-pulse { 50% { box-shadow: 0 0 0 8px color-mix(in srgb, $champagne 0%, transparent); } }
 
 // ─── Sobre ───
 .about {
@@ -245,23 +247,24 @@
   }
 
   &__visual {
+    @include fixed-palette;
     position: relative;
     aspect-ratio: 4 / 5;
     border-radius: $r-lg;
     overflow: hidden;
     background: $forest;
     img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba($forest, 0) 50%, rgba($forest, 0.6)); }
+    &::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, color-mix(in srgb, $forest 0%, transparent) 50%, color-mix(in srgb, $forest 60%, transparent)); }
   }
   &__sensor { position: absolute; inset: 0; pointer-events: none; }
-  &__ring { position: absolute; z-index: 1; inset: 14%; border: 1px solid rgba($offwhite, 0.45); border-radius: 50%; animation: orbit-spin 80s linear infinite; border-style: dashed; }
+  &__ring { position: absolute; z-index: 1; inset: 14%; border: 1px solid color-mix(in srgb, $offwhite 45%, transparent); border-radius: 50%; animation: orbit-spin 80s linear infinite; border-style: dashed; }
   &__badge {
     position: absolute;
     z-index: 2;
     inset: auto 1rem 1rem;
     padding: 1.1rem 1.35rem;
     border-radius: $r-md;
-    background: rgba($offwhite, 0.82);
+    background: color-mix(in srgb, $offwhite 82%, transparent);
     backdrop-filter: blur(10px);
     span { @include eyebrow; font-size: 0.625rem; color: $forest; }
     p { margin: 0.35rem 0 0; font-size: 0.9375rem; line-height: 1.5; color: $stone-green; }
@@ -292,15 +295,15 @@
   input, select, textarea {
     width: 100%;
     padding: 0.95rem 1.25rem;
-    border: 1px solid rgba($forest, 0.18);
+    border: 1px solid color-mix(in srgb, $forest 18%, transparent);
     border-radius: 1.25rem;
-    background: rgba($offwhite, 0.75);
+    background: color-mix(in srgb, $offwhite 75%, transparent);
     color: $forest;
     font: inherit;
     transition: border-color 0.4s, background 0.4s, box-shadow 0.4s;
-    &::placeholder { color: rgba($stone-green, 0.55); }
-    &:hover { border-color: rgba($forest, 0.4); }
-    &:focus { outline: none; border-color: $forest; background: $offwhite; box-shadow: 0 0 0 4px rgba($champagne, 0.35); }
+    &::placeholder { color: color-mix(in srgb, $stone-green 55%, transparent); }
+    &:hover { border-color: color-mix(in srgb, $forest 40%, transparent); }
+    &:focus { outline: none; border-color: $forest; background: $offwhite; box-shadow: 0 0 0 4px color-mix(in srgb, $champagne 35%, transparent); }
   }
   textarea { resize: vertical; min-height: 7rem; }
   &__submit { grid-column: 1 / -1; justify-self: start; border: 0; cursor: pointer; }
@@ -308,7 +311,7 @@
   &__done {
     padding: 1.75rem;
     border-radius: $r-md;
-    background: rgba($offwhite, 0.8);
+    background: color-mix(in srgb, $offwhite 80%, transparent);
     h3 { margin: 0 0 0.5rem; font-size: 2rem; font-weight: 300; font-style: italic; color: $forest; }
     p { margin: 0 0 1rem; line-height: 1.6; }
   }
@@ -319,6 +322,7 @@
 
 // Placa de mármore verde com a logo em dourado: inclina com mouse/toque (limitada, volta ao repouso)
 .plaque {
+  @include fixed-palette;
   --rx: 0deg; --ry: 0deg; --gx: 50%; --gy: 50%; --px: 0px; --py: 0px;
   display: flex;
   flex: 1;

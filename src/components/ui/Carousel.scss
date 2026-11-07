@@ -41,7 +41,7 @@
     flex: 1;
     height: 3px;
     border-radius: $r-pill;
-    background: rgba($stone-green, 0.14);
+    background: color-mix(in srgb, $stone-green 14%, transparent);
     overflow: hidden;
     i {
       position: absolute;
@@ -59,9 +59,9 @@
     place-items: center;
     width: 52px;
     height: 52px;
-    border: 1px solid rgba($forest, 0.25);
+    border: 1px solid color-mix(in srgb, $forest 25%, transparent);
     border-radius: 50%;
-    background: rgba($offwhite, 0.7);
+    background: color-mix(in srgb, $offwhite 70%, transparent);
     color: $forest;
     cursor: pointer;
     transition: transform 0.5s $ease-out, background 0.4s, color 0.4s, border-color 0.4s, box-shadow 0.5s $ease-out;
@@ -70,7 +70,7 @@
       color: $offwhite;
       border-color: $forest;
       transform: scale(1.06);
-      box-shadow: 0 12px 24px -10px rgba($forest, 0.6);
+      box-shadow: 0 12px 24px -10px rgba(#0a1612, 0.6);
     }
     &:disabled { opacity: 0.35; cursor: default; }
   }

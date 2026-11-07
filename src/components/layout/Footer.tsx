@@ -1,4 +1,3 @@
-import { useRef } from 'react';
 import { contact } from '../../data/contact';
 import { navigation } from '../../data/navigation';
 import { useNear } from '../../hooks/useNear';
@@ -8,29 +7,15 @@ import './Footer.scss';
 
 /**
  * Rodapé como uma laje de mármore verde (largura total): veios dourados que se desenham ao entrar na tela,
- * brilho de polimento e uma luz champagne que segue o cursor.
+ * (versão crua: sem brilho de polimento nem luz do cursor).
  * Texturas só são pedidas quando o rodapé se aproxima (não disputam banda com o LCP).
  */
 export function Footer() {
   const [ref, near] = useNear<HTMLElement>('250px 0px');
-  const raf = useRef(0);
 
   const go = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     scrollToHash(href);
-  };
-
-  // luz do cursor: só mouse; atualiza variáveis CSS (sem re-render do React)
-  const onMove = (e: React.PointerEvent<HTMLElement>) => {
-    if (e.pointerType !== 'mouse') return;
-    const el = e.currentTarget;
-    const { clientX, clientY } = e;
-    cancelAnimationFrame(raf.current);
-    raf.current = requestAnimationFrame(() => {
-      const r = el.getBoundingClientRect();
-      el.style.setProperty('--mx', `${clientX - r.left}px`);
-      el.style.setProperty('--my', `${clientY - r.top}px`);
-    });
   };
 
   const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}` : null;
@@ -40,7 +25,6 @@ export function Footer() {
     <footer
       ref={ref}
       className={`site-footer${near ? ' is-in' : ''}`}
-      onPointerMove={onMove}
     >
       <span className="site-footer__stone" aria-hidden="true" />
       <svg className="site-footer__veins" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
@@ -49,8 +33,6 @@ export function Footer() {
         <path pathLength="1" style={{ '--n': 2 } as React.CSSProperties} d="M820 -20C860 80 980 100 1020 190S1090 330 1220 360" />
         <path pathLength="1" className="is-thin" style={{ '--n': 3 } as React.CSSProperties} d="M-20 120C100 150 170 90 260 120S400 210 480 180" />
       </svg>
-      <span className="site-footer__sheen" aria-hidden="true" />
-      <span className="site-footer__glow" aria-hidden="true" />
 
       <div className="site-footer__top">
         <div className="site-footer__brand">

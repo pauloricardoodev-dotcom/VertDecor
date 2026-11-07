@@ -1,6 +1,7 @@
 @import '../../styles/mixins';
 
 .site-footer {
+  @include fixed-palette;
   position: relative;
   isolation: isolate;
   overflow: hidden;
@@ -9,12 +10,12 @@
   border-radius: $r-lg $r-lg 0 0;
   padding: clamp(3.5rem, 8vw, 6rem) 1.5rem 1.75rem;
   background: $forest;
-  color: rgba($offwhite, 0.86);
+  color: color-mix(in srgb, $offwhite 86%, transparent);
   box-shadow: inset 0 0 0 1px rgba(#fff, 0.1), inset 0 -50px 90px rgba(#000, 0.28);
   @include media-breakpoint-up(lg) { padding-inline: clamp(2rem, 4vw, 4.5rem); }
 
   // ─── Camadas da laje ───
-  &__stone, &__veins, &__sheen, &__glow { position: absolute; inset: 0; pointer-events: none; }
+  &__stone, &__veins { position: absolute; inset: 0; pointer-events: none; }
 
   // textura + véu escuro (garante contraste dos textos sobre os veios claros)
   &__stone {
@@ -45,28 +46,6 @@
     animation-delay: calc(var(--n) * 0.45s), calc(5s + var(--n) * 0.8s);
   }
 
-  // polimento que atravessa a pedra
-  &__sheen {
-    z-index: -2;
-    background: linear-gradient(115deg, transparent 40%, rgba(#fff, 0.13) 50%, transparent 60%);
-    transform: translateX(-70%);
-  }
-  &.is-in &__sheen { animation: foot-sheen 10s $ease-in-out 1.2s infinite; }
-
-  // luz champagne que segue o cursor (só mouse/hover)
-  &__glow {
-    z-index: -1;
-    opacity: 0;
-    transition: opacity 0.6s $ease-out;
-    background:
-      radial-gradient(circle 120px at var(--mx, 50%) var(--my, 40%), rgba(#fff3d2, 0.3), transparent 70%),
-      radial-gradient(circle 340px at var(--mx, 50%) var(--my, 40%), rgba(#e4bb74, 0.2), transparent 72%);
-  }
-  @media (hover: hover) and (pointer: fine) {
-    &:hover &__glow { opacity: 1; }
-  }
-  @include reduced-motion { &__glow, &__sheen { display: none; } }
-
   // ─── Conteúdo ───
   &__top {
     position: relative;
@@ -81,9 +60,8 @@
   a { color: $offwhite; padding-block: 0.2rem; transition: color 0.4s; &:hover, &:focus-visible { color: #f1d58f; } }
   li span { opacity: 0.85; }
 
-  &__legal { position: relative; margin: clamp(2.5rem, 6vw, 4rem) 0 0; padding-top: 1.25rem; border-top: 1px solid rgba($offwhite, 0.16); font-size: 0.8125rem; color: rgba($offwhite, 0.78); }
+  &__legal { position: relative; margin: clamp(2.5rem, 6vw, 4rem) 0 0; padding-top: 1.25rem; border-top: 1px solid color-mix(in srgb, $offwhite 16%, transparent); font-size: 0.8125rem; color: color-mix(in srgb, $offwhite 78%, transparent); }
 }
 
 @keyframes foot-vein { to { stroke-dashoffset: 0; } }
 @keyframes foot-breathe { 0%, 100% { opacity: 0.55; } 50% { opacity: 0.95; } }
-@keyframes foot-sheen { 0%, 15% { transform: translateX(-70%); } 65%, 100% { transform: translateX(70%); } }

@@ -1,0 +1,45 @@
+@import '../../styles/mixins';
+
+.theme-toggle {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 60;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: 1px solid rgba(#e4bb74, 0.6);
+  border-radius: 50%;
+  // sempre um "botão de pedra": verde escuro com ícone champagne, nos dois temas
+  background: #173b32;
+  color: #f1d58f;
+  box-shadow: 0 14px 30px -10px rgba(#06120e, 0.65), inset 0 1px 0 rgba(#fff, 0.14);
+  cursor: pointer;
+  transition: transform 0.5s $ease-out, box-shadow 0.5s $ease-out, background 0.4s, color 0.4s;
+  animation: theme-in 0.9s $ease-out intro(1.4s) both;
+
+  &:hover, &:focus-visible {
+    transform: translateY(-3px) scale(1.06);
+    background: #e4bb74;
+    color: #173b32;
+    box-shadow: 0 18px 34px -10px rgba(#e4bb74, 0.55);
+  }
+  &:active { transform: scale(0.95); }
+  &:focus-visible { outline: 2px solid #e4bb74; outline-offset: 4px; }
+
+  &__icon { overflow: visible; }
+  &__sun, &__moon { transform-origin: 12px 12px; transition: transform 0.7s $ease-out, opacity 0.5s; }
+  // claro: mostra a lua (ação = escurecer) · escuro: mostra o sol
+  &__sun { opacity: 0; transform: rotate(-90deg) scale(0.4); }
+  &.is-dark &__sun { opacity: 1; transform: none; }
+  &.is-dark &__moon { opacity: 0; transform: rotate(90deg) scale(0.4); }
+}
+
+@keyframes theme-in { from { opacity: 0; transform: translateY(14px) scale(0.9); } to { opacity: 1; transform: none; } }
+
+// transição de tema (View Transitions): a revelação circular é feita via JS
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-old(root) { z-index: 1; }
+::view-transition-new(root) { z-index: 2; }

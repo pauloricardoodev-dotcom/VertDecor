@@ -10,14 +10,14 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba($offwhite, 0.42);
+    background: color-mix(in srgb, $offwhite 42%, transparent);
     backdrop-filter: blur(22px) saturate(1.25);
     -webkit-backdrop-filter: blur(22px) saturate(1.25);
-    border-bottom: 1px solid rgba($stone-green, 0.08);
+    border-bottom: 1px solid color-mix(in srgb, $stone-green 8%, transparent);
     border-radius: 0 0 1.5rem 1.5rem;
     transition: background 0.5s $ease-out, opacity 0.5s $ease-out;
   }
-  &.is-scrolled::before { background: rgba($offwhite, 0.55); }
+  &.is-scrolled::before { background: color-mix(in srgb, $offwhite 55%, transparent); }
   &.is-open::before { opacity: 0; }
 
   &__inner {
@@ -168,7 +168,7 @@
 
     li {
       overflow: hidden;
-      border-bottom: 1px solid rgba($offwhite, 0.12);
+      border-bottom: 1px solid color-mix(in srgb, $offwhite 12%, transparent);
     }
     a {
       display: flex;
@@ -188,7 +188,7 @@
   &__index {
     font-size: 0.6875rem;
     letter-spacing: 0.2em;
-    color: rgba($offwhite, 0.7);
+    color: color-mix(in srgb, $offwhite 70%, transparent);
   }
   &__label {
     font-family: $font-serif;
@@ -211,7 +211,7 @@
       @include eyebrow;
       margin: 0;
       font-size: 0.625rem;
-      color: rgba($offwhite, 0.75);
+      color: color-mix(in srgb, $offwhite 75%, transparent);
     }
   }
   &.is-open &__footer { opacity: 1; transition-delay: 0.6s; }
@@ -219,3 +219,6 @@
 
 @keyframes nav-fade { from { opacity: 0; } to { opacity: 1; } }
 @keyframes nav-rise { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+
+// menu aberto: sempre verde com texto claro (mesmo no tema escuro)
+.site-nav.is-open { @include fixed-palette; }

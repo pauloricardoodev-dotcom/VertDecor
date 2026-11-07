@@ -1,0 +1,37 @@
+@import 'tokens';
+
+// ─── Temas ───
+// Claro = identidade original. Escuro = verde-grafite profundo, texto areia.
+// Os componentes usam os tokens ($forest, $offwhite…), que agora são variáveis CSS.
+@mixin theme-vars {
+  :root {
+    color-scheme: light;
+    --forest: #{$forest-hex};
+    --stone-green: #{$stone-green-hex};
+    --sand: #{$sand-hex};
+    --offwhite: #{$offwhite-hex};
+    --champagne: #{$champagne-hex};
+    --ink-muted: #{$ink-muted-hex};
+  }
+  :root[data-theme='dark'] {
+    color-scheme: dark;
+    --forest: #ece6d8;        // títulos / elementos de destaque (antes verde escuro)
+    --stone-green: #cdd5cc;   // texto de corpo
+    --sand: #15251f;          // superfícies (painéis)
+    --offwhite: #0c1713;      // fundo da página
+    --champagne: #c7ad7f;
+    --ink-muted: #9fb0a6;
+  }
+}
+
+// Áreas que são SEMPRE escuras/verdes (Manifesto, rodapé, placa, tela de carregamento…):
+// restauram a paleta original mesmo no tema escuro.
+@mixin fixed-palette {
+  --forest: #{$forest-hex};
+  --stone-green: #{$stone-green-hex};
+  --sand: #{$sand-hex};
+  --offwhite: #{$offwhite-hex};
+  --champagne: #{$champagne-hex};
+  --ink-muted: #{$ink-muted-hex};
+  color-scheme: light;
+}

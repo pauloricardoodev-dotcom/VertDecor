@@ -7,19 +7,29 @@ interface LogoProps {
 
 const RATIO = 413 / 2010;
 
-/** Logo oficial da Vert Decor (assets otimizados gerados por scripts/optimize-logo.mjs). */
-export function Logo({ variant = 'color', className, width = 168 }: LogoProps) {
-  const base = variant === 'light' ? '/logo/vert-decor-light' : '/logo/vert-decor';
-  return (
+/**
+ * Logo oficial da Vert Decor (assets otimizados gerados por scripts/optimize-logo.mjs).
+ * `color` troca sozinha para a versão clara no tema escuro (CSS em global.scss).
+ */
+export function Logo({ variant = 'color', className = '', width = 168 }: LogoProps) {
+  const img = (base: string, extra: string, lazy = false, alt = 'Vert Decor') => (
     <img
-      className={className}
+      className={`${className} ${extra}`.trim() || undefined}
       src={`${base}-360.webp`}
       srcSet={`${base}-360.webp 360w, ${base}-720.webp 720w`}
       sizes={`${width}px`}
       width={width}
       height={Math.round(width * RATIO)}
-      alt="Vert Decor"
+      alt={alt}
       decoding="async"
+      loading={lazy ? 'lazy' : undefined}
     />
+  );
+  if (variant === 'light') return img('/logo/vert-decor-light', '');
+  return (
+    <>
+      {img('/logo/vert-decor', 'logo-themed--color')}
+      {img('/logo/vert-decor-light', 'logo-themed--light', true, '')}
+    </>
   );
 }
