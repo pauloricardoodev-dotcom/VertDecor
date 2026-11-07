@@ -1,0 +1,56 @@
+@import 'mixins';
+
+:root {
+  --forest: #{$forest};
+  --stone-green: #{$stone-green};
+  --sand: #{$sand};
+  --offwhite: #{$offwhite};
+  --champagne: #{$champagne};
+  --ink-muted: #{$ink-muted};
+  --nav-h: 4.25rem;
+  @include media-breakpoint-up(lg) { --nav-h: 5.5rem; }
+}
+
+html { scroll-padding-top: var(--nav-h); }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  background: $offwhite;
+  color: $stone-green;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+body.is-locked { overflow: hidden; }
+
+h1, h2, h3 { letter-spacing: -0.01em; line-height: 1.02; }
+
+::selection { background: $forest; color: $offwhite; }
+
+:focus-visible {
+  outline: 1px solid $forest;
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: $forest;
+  color: $offwhite;
+  transform: translateY(-200%);
+  &:focus { transform: none; color: $offwhite; }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

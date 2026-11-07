@@ -1,0 +1,323 @@
+@import '../../../styles/mixins';
+
+// ─── Layout (mobile first) ───
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: calc(var(--nav-h) + 1.25rem) 1.25rem 2.5rem;
+  background:
+    radial-gradient(120% 70% at 50% 62%, rgba($sand, 0.95) 0%, rgba($sand, 0) 62%),
+    $offwhite;
+  overflow: hidden;
+
+  @include media-breakpoint-up(md) { padding-inline: 2rem; }
+  @include media-breakpoint-up(lg) {
+    display: flex;
+    align-items: stretch;
+    padding: var(--nav-h) clamp(2rem, 4vw, 4.5rem) 0;
+    background:
+      radial-gradient(60% 75% at 70% 58%, rgba($sand, 0.95) 0%, rgba($sand, 0) 70%),
+      $offwhite;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-areas: 'head' 'stage' 'body';
+    gap: 1.25rem;
+    width: 100%;
+
+    @include media-breakpoint-up(lg) {
+      grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+      grid-template-rows: 1fr auto;
+      grid-template-areas: 'head stage' 'body stage';
+      column-gap: clamp(1rem, 3vw, 3rem);
+      row-gap: 2.25rem;
+      min-height: calc(100svh - var(--nav-h));
+      padding-bottom: clamp(5.5rem, 11vh, 7rem);
+    }
+  }
+
+  &__head { grid-area: head; @include media-breakpoint-up(lg) { align-self: end; } }
+  &__body { grid-area: body; @include media-breakpoint-up(lg) { align-self: start; } }
+
+  // ─── Tipografia ───
+  &__eyebrow {
+    @include eyebrow;
+    margin: 0 0 1.1rem;
+    color: $ink-muted;
+    animation: hero-up 0.9s $ease-out 0.35s both;
+    span { margin-inline: 0.35em; color: $champagne; }
+  }
+
+  &__title {
+    margin: 0;
+    font-weight: 300;
+    font-size: clamp(2.6rem, 11.5vw, 4.75rem);
+    line-height: 0.98;
+    color: $forest;
+
+    @include media-breakpoint-up(lg) { font-size: clamp(3.6rem, 5.4vw, 7rem); }
+
+    em { font-style: italic; }
+  }
+
+  &__title-line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em; // evita cortar descendentes
+    margin-bottom: -0.08em;
+
+    > span {
+      display: inline-block;
+      animation: hero-line 1.15s $ease-out both;
+      animation-delay: calc(0.45s + var(--i) * 0.11s);
+    }
+  }
+
+  &__lead {
+    max-width: 34ch;
+    margin: 0 0 1.75rem;
+    font-size: 1rem;
+    line-height: 1.65;
+    color: $stone-green;
+    animation: hero-up 1s $ease-out 0.95s both;
+    @include media-breakpoint-up(lg) { font-size: 1.0625rem; }
+  }
+
+  &__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.75rem;
+    animation: hero-up 1s $ease-out 1.05s both;
+  }
+
+  // ─── Palco ───
+  &__stage {
+    grid-area: stage;
+    position: relative;
+    width: 100%;
+    max-width: 34rem;
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: hero-stage 1.5s $ease-out 0.15s both;
+
+    @include media-breakpoint-up(lg) {
+      display: block;
+      align-self: center;
+      justify-self: end;
+      width: min(100%, calc(100svh - var(--nav-h) - 3rem));
+      max-width: none;
+      aspect-ratio: 1;
+    }
+  }
+
+  &__viewport {
+    position: relative;
+    aspect-ratio: 1;
+    @include media-breakpoint-up(lg) { position: absolute; inset: 0; }
+
+    // círculo fino: pedestal/galeria (elemento gráfico discreto)
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 9%;
+      border: 1px solid rgba($champagne, 0.45);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+  }
+
+  &__stage-meta {
+    position: relative;
+    @include media-breakpoint-up(lg) { position: absolute; inset: 0 0 auto; }
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 1px solid rgba($stone-green, 0.14);
+    animation: hero-fade 1s $ease-out 0.9s both;
+    span {
+      @include eyebrow;
+      font-size: 0.625rem;
+      color: $ink-muted;
+    }
+  }
+
+  // ─── Indicador de scroll (desktop) ───
+  &__scroll {
+    display: none;
+    @include media-breakpoint-up(lg) {
+      position: absolute;
+      left: clamp(2rem, 4vw, 4.5rem);
+      bottom: 0;
+      display: flex;
+      align-items: flex-end;
+      gap: 0.9rem;
+      height: 4.5rem;
+      padding-bottom: 0.25rem;
+      color: $ink-muted;
+      animation: hero-fade 1s $ease-out 1.5s both;
+      span { @include eyebrow; font-size: 0.625rem; padding-bottom: 1.1rem; }
+      &::before {
+        content: '';
+        order: -1;
+        width: 1px;
+        height: 100%;
+        background: linear-gradient($stone-green, $stone-green) 0 0 / 100% 40% no-repeat, rgba($stone-green, 0.15);
+        animation: scroll-line 2.4s $ease-in-out infinite;
+      }
+    }
+  }
+}
+
+// ─── Posters + canvas ───
+.hero-stage {
+  position: absolute;
+  inset: 0;
+
+  &__posters img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 0.9s $ease-out;
+    &.is-active { opacity: 1; }
+  }
+
+  &__canvas {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 0.9s $ease-out;
+  }
+
+  &.is-3d &__canvas { opacity: 1; }
+  &.is-3d &__posters { opacity: 0; transition: opacity 0.4s linear 0.9s; visibility: hidden; }
+}
+
+// ─── Seletor de pedras ───
+.stone-selector {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+
+  @include media-breakpoint-up(lg) {
+    position: absolute;
+    inset: auto 0 0;
+    align-items: flex-start;
+  }
+
+  &__caption {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin: 0;
+    animation: hero-fade 1s $ease-out 1.25s both;
+  }
+  &__count { @include eyebrow; font-size: 0.625rem; color: $ink-muted; }
+  &__name { font-family: $font-serif; font-size: 1.25rem; font-style: italic; color: $forest; }
+
+  &__options { display: flex; gap: 0.25rem; }
+
+  &__option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    min-width: 4.25rem;
+    padding: 0.35rem 0.25rem;
+    border: 0;
+    background: none;
+    color: $ink-muted;
+    cursor: pointer;
+    animation: hero-up 0.9s $ease-out both;
+    animation-delay: calc(1.2s + var(--i) * 0.07s);
+
+    &[aria-checked='true'] { color: $forest; }
+  }
+
+  &__swatch {
+    position: relative;
+    display: block;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 0 0 1px rgba($stone-green, 0.15);
+    transition: transform 0.5s $ease-out, box-shadow 0.5s $ease-out;
+
+    .stone-selector__option:hover & { transform: scale(1.08); }
+    [aria-checked='true'] & { box-shadow: 0 0 0 1px $offwhite, 0 0 0 2px $forest; }
+  }
+
+  &__label { @include eyebrow; font-size: 0.5625rem; letter-spacing: 0.16em; }
+}
+
+// ─── Botões ───
+.btn-vert {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  isolation: isolate;
+
+  &--solid {
+    padding: 0 1.75rem;
+    background: $forest;
+    color: $offwhite;
+    overflow: hidden;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: $stone-green;
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.6s $ease-out;
+    }
+    &:hover, &:focus-visible { color: $offwhite; &::before { transform: scaleY(1); } }
+  }
+
+  &--line {
+    color: $forest;
+    span { position: relative; padding-bottom: 0.3rem; }
+    span::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: currentColor;
+      transform-origin: left;
+      transition: transform 0.6s $ease-out;
+    }
+    &:hover span::after { transform: scaleX(0.35); }
+  }
+}
+
+// ─── Keyframes ───
+@keyframes hero-line { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes hero-up { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes hero-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes hero-stage { from { transform: translateY(28px) scale(0.965); } to { transform: none; } }
+@keyframes scroll-line {
+  0% { background-position: 0 -100%; }
+  100% { background-position: 0 250%; }
+}

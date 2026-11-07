@@ -1,0 +1,35 @@
+{
+  "name": "vert-decor",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "textures": "node scripts/generate-textures.mjs",
+    "posters": "node scripts/capture-posters.mjs"
+  },
+  "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/dm-sans": "^5.3.0",
+    "@react-three/drei": "^10.7.9",
+    "@react-three/fiber": "^9.8.2",
+    "bootstrap": "^5.3.8",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@types/three": "^0.187.0",
+    "@vitejs/plugin-react": "^6.2.1",
+    "puppeteer-core": "^24.43.1",
+    "sass": "^1.108.1",
+    "sharp": "^0.35.5",
+    "simplex-noise": "^4.0.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.6"
+  }
+}

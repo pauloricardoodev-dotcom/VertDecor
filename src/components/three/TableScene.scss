@@ -1,0 +1,55 @@
+@import '../../styles/mixins';
+
+.stage3d {
+  position: absolute;
+  inset: 0;
+
+  &__canvas {
+    position: absolute !important;
+    inset: 0;
+    cursor: grab;
+    &:active { cursor: grabbing; }
+  }
+
+  &__controls {
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: none; // celular: gira com o dedo, sem botões sobre a peça
+    @include media-breakpoint-up(md) { display: flex; }
+    @include media-breakpoint-up(lg) { top: 2.75rem; }
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    animation: stage-fade 0.8s $ease-out 0.3s both;
+
+    button {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border: 1px solid rgba($stone-green, 0.18);
+      background: rgba($offwhite, 0.6);
+      color: $stone-green;
+      font-size: 1.1rem;
+      line-height: 1;
+      cursor: pointer;
+      transition: background 0.3s, color 0.3s, border-color 0.3s;
+      &:hover:not(:disabled) { background: $forest; color: $offwhite; border-color: $forest; }
+      &:disabled { opacity: 0.35; cursor: default; }
+    }
+  }
+
+  &__hint {
+    @include eyebrow;
+    display: none;
+    margin-bottom: 0.75rem;
+    font-size: 0.625rem;
+    color: $ink-muted;
+    writing-mode: vertical-rl;
+    @include media-breakpoint-up(md) { display: block; }
+  }
+}
+
+@keyframes stage-fade { from { opacity: 0; } to { opacity: 1; } }

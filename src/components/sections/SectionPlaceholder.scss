@@ -1,0 +1,28 @@
+@import '../../styles/mixins';
+
+.section-placeholder {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 70svh;
+  padding: 6rem 1.25rem;
+  @include media-breakpoint-up(lg) { padding-inline: clamp(2rem, 4vw, 4.5rem); }
+
+  &--light { background: $offwhite; }
+  &--sand { background: $sand; }
+  &--forest { background: $forest; color: $offwhite; h2 { color: $offwhite; } }
+
+  h2 {
+    margin: 0.75rem 0 1rem;
+    font-weight: 300;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    color: $forest;
+  }
+
+  &__index, &__note {
+    @include eyebrow;
+    margin: 0;
+    font-size: 0.625rem;
+    opacity: 0.85;
+  }
+}

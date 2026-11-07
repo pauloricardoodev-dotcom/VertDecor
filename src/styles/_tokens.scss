@@ -1,0 +1,32 @@
+// ─── Paleta Vert Decor (ver docs/01-identidade.md) ───
+$forest: #173B32;
+$stone-green: #283F37;
+$sand: #E9E2D5;
+$offwhite: #F7F5EF;
+$champagne: #B39A70; // decorativo apenas — não passa AA como texto sobre claro
+$ink-muted: #56635C;  // texto secundário (AA sobre offwhite/sand)
+
+$font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+$font-sans: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+$ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+// ─── Overrides do Bootstrap ───
+$primary: $forest;
+$secondary: $stone-green;
+$light: $offwhite;
+$dark: $stone-green;
+$body-bg: $offwhite;
+$body-color: $stone-green;
+$font-family-base: $font-sans;
+$headings-font-family: $font-serif;
+$headings-font-weight: 400;
+$border-radius: 0;
+$border-radius-sm: 0;
+$border-radius-lg: 0;
+$link-color: $forest;
+$link-decoration: none;
+$enable-smooth-scroll: false; // controlado em global.scss respeitando reduced-motion
+$grid-gutter-width: 2rem;
+$container-max-widths: (sm: 540px, md: 720px, lg: 960px, xl: 1140px, xxl: 1440px);
