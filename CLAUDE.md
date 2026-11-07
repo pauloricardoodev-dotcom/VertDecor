@@ -37,3 +37,16 @@ Postura: Senior Creative Developer + Art Director de marcas de luxo. Ousado na d
 - Ao implementar uma seção: ler `01-identidade.md` (uma vez) + o arquivo da seção + `03-performance.md` se envolver mídia/animação/3D.
 - Cada seção = componente próprio em `src/components/sections/`. Dados em `src/data/`.
 - Ao fim de cada etapa: `npm run build` + Lighthouse (mobile e desktop) e registrar os scores.
+
+## Comandos
+- `npm run dev` — desenvolvimento · `npm run build` — build + pré-renderização (HTML estático hidratado) · `npm run preview` — serve o build (porta 4173)
+- `npm run textures` (`-- <id>` para uma pedra) — regenera texturas provisórias · `npm run posters` — renderiza os posters do Hero a partir da própria cena 3D (rodar sempre que mudar câmera, luz, mesa ou texturas)
+- `node scripts/optimize-logo.mjs` — gera as versões otimizadas da logo a partir de `public/logo/*.png`
+
+## Decisões de performance já tomadas (não desfazer sem medir)
+- Home pré-renderizada no build (`src/entry-server.tsx` + `scripts/prerender.mjs`): CSS inline, preload de fontes, JS só carrega após o 1º frame.
+- Hero: poster AVIF/WebP é o LCP; Three.js (chunk ~270 KB gz) só carrega na 1ª interação. Sombra da mesa é *baked* (`BakedShadow`).
+- Bootstrap: só fundação, grid e utilitários de layout (`src/styles/bootstrap.scss`).
+
+## Status
+Ver `docs/status.md`.

@@ -1,5 +1,5 @@
 import { StrictMode } from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 
 // Fontes self-hosted (somente subconjunto latin e pesos usados)
 import '@fontsource/cormorant-garamond/latin-300.css';
@@ -12,8 +12,13 @@ import './styles/bootstrap.scss';
 import './styles/global.scss';
 import App from './App';
 
-createRoot(document.getElementById('root')!).render(
+const root = document.getElementById('root')!;
+const app = (
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
 );
+
+// Em produção o HTML já vem pré-renderizado (scripts/prerender.mjs): apenas hidrata
+if (root.hasChildNodes()) hydrateRoot(root, app);
+else createRoot(root).render(app);

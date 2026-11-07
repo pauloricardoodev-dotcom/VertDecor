@@ -6,6 +6,9 @@ import { getDeviceTier, onIdle, prefersSaveData, supportsWebGL, type DeviceTier 
 // Three.js fica em um chunk separado e só é baixado depois da primeira interação
 const TableScene = lazy(() => import('../../three/TableScene'));
 
+// Mesmo valor do preload em index.html
+const POSTER_SIZES = '(min-width: 992px) min(56vw, calc(100svh - 8.5rem)), (min-width: 768px) 34rem, calc(100vw - 2.5rem)';
+
 const INTERACTION_EVENTS = ['pointerdown', 'pointermove', 'touchstart', 'keydown', 'wheel', 'scroll'] as const;
 
 interface Props {
@@ -51,18 +54,23 @@ export function HeroStage({ materialId }: Props) {
       <div className="hero-stage__posters">
         {materials.map((m, i) =>
           seen.includes(m.id) ? (
-            <img
-              key={m.id}
-              className={m.id === materialId ? 'is-active' : undefined}
-              src={`${m.poster}-720.webp`}
-              srcSet={`${m.poster}-720.webp 720w, ${m.poster}-1200.webp 1200w`}
-              sizes="(min-width: 992px) 56vw, 100vw"
-              width={1200}
-              height={1200}
-              alt={m.id === materialId ? `Mesa lateral de tampo circular em ${m.name}` : ''}
-              fetchPriority={i === 0 ? 'high' : 'auto'}
-              decoding={i === 0 ? 'sync' : 'async'}
-            />
+            <picture key={m.id} className={m.id === materialId ? 'is-active' : undefined}>
+              <source
+                type="image/avif"
+                srcSet={`${m.poster}-720.avif 720w, ${m.poster}-1200.avif 1200w`}
+                sizes={POSTER_SIZES}
+              />
+              <img
+                src={`${m.poster}-720.webp`}
+                srcSet={`${m.poster}-720.webp 720w, ${m.poster}-1200.webp 1200w`}
+                sizes={POSTER_SIZES}
+                width={1200}
+                height={1200}
+                alt={m.id === materialId ? `Mesa lateral de tampo circular em ${m.name}` : ''}
+                fetchPriority={i === 0 ? 'high' : 'auto'}
+                decoding={i === 0 ? 'sync' : 'async'}
+              />
+            </picture>
           ) : null,
         )}
       </div>

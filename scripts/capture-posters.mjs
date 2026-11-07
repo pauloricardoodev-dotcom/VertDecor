@@ -21,7 +21,10 @@ for (const stone of stones) {
   await page.waitForFunction('window.__ready === true', { timeout: 60000 });
   const png = await page.screenshot({ omitBackground: true, type: 'png' });
   for (const w of [720, 1200]) {
-    await sharp(png).resize(w).webp({ quality: 82, alphaQuality: 90, effort: 6 }).toFile(`public/images/hero/poster-${stone}-${w}.webp`);
+    const img = sharp(png).resize(w);
+    const out = `public/images/hero/poster-${stone}-${w}`;
+    await img.clone().avif({ quality: 50, effort: 6 }).toFile(`${out}.avif`);
+    await img.clone().webp({ quality: 72, alphaQuality: 50, effort: 6 }).toFile(`${out}.webp`);
   }
   console.log('poster', stone);
   await page.close();
